@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/bootstrap.css" class="rel">
+    <!--<link rel="stylesheet" href="bootstrap.css" class="rel">-->
+    <title>Log in to create posts</title>
+</head>
+<body>
+    <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Log in</h3>
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                        {% include 'includes/form.html' %}
+                        <button type="submit" class="btn btn-primary btn-block">Log in</button>
+                    </form>
+                </div>
+                <div class="card-footer text-muted text-center">
+                    <a href="{% url 'signup' %}" >Sign up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

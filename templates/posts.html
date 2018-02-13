@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    <div class="mb-4 mt-4">
+        <a  class="btn btn-primary" href="{% url 'new_post' %}" role="button">Post</a>
+    </div>
     {% for post in posts %}
-        <div id="{{ post.pk }}" class="mb-2 {% if forloop.first  %}border-dark{% endif %}">
-            <div class="py-2 px-3">{{ post.title }}</div>
-            <div class="p-3">
+        <div id="{{ post.pk }}" class="card mb-2 border-dark">
+            <div class="card-body p-3">
+                <div class="py-2 px-3">{{ post.title }}</div>
                 <div class="row">
                     <div class="col-2">
                         <img src="{% static 'img/avatar.svg' %}" alt="{{ post.created_by.username }}" class="w-100"/>
-                        <small>Posts: post.created_by.posts.count</small>
+                        <small>Posts: {{ post.created_by.posts.count }} </small>
                     </div>
                     <div class="col-10">
                         <div class="row mb-3">
@@ -20,6 +23,12 @@
                             </div>
                         </div>
                         {{ post.message }}
+                        {% if post.created_by == user %}
+                            <div class="mt-3">
+                                <a name="" id="" class="btn btn-primary|secondary|success|info|warning|danger"
+                                   href="{% url 'edit_post' post.pk %}" role="button">Edit</a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
