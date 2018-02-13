@@ -24,10 +24,9 @@ from accounts import views as account_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', posts_views.PostListView.as_view(),name="home"),
-    # url(r'^login/$', views.PostListView.as_view(), name='login'),
     url(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
     url(r'^signup/$', account_views.signup, name='signup'),
     url(r'^posts/(?P<post_pk>\d+)/edit/$', posts_views.PostEditView.as_view(), name='edit_post'),
     url(r'^posts/new_post/$', posts_views.new_post, name='new_post'),
-    # url(r'^signup/$', accounts_views.signup, name='signup'),
 ]
