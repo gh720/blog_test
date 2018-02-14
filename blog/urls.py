@@ -24,9 +24,13 @@ from accounts import views as account_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', posts_views.PostListView.as_view(),name="home"),
+    url(r'^posts/(?P<post_pk>\d+)/details/$', posts_views.PostDetailsView.as_view(), name='post_details'),
     url(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
     url(r'^signup/$', account_views.signup, name='signup'),
     url(r'^posts/(?P<post_pk>\d+)/edit/$', posts_views.PostEditView.as_view(), name='edit_post'),
     url(r'^posts/new_post/$', posts_views.new_post, name='new_post'),
+    url(r'^posts/(?P<post_pk>\d+)/delete/$', posts_views.remove_post, name='remove_post'),
+    # url(r'^posts/(?P<post_pk>\d+)/new_comment/$', posts_views.PostDetailsView.as_view(), name='new_comment'),
+    url(r'^posts/(?P<post_pk>\d+)/comments/(?P<comment_pk>\d+)/delete/$', posts_views.remove_comment, name='remove_comment'),
 ]
