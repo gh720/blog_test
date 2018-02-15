@@ -1,3 +1,7 @@
 .navbar-brand {
     font-family: 'Sans-Serif', cursive;
 }
+
+.sidebar {
+    background-color: #eee;
+}

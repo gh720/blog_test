@@ -2,6 +2,9 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+class Tags(models.Model):
+    tag = models.CharField(max_length=50)
+
 class Post(models.Model):
     title = models.CharField(max_length=400)
     message = models.TextField(max_length=4000)
@@ -9,9 +12,9 @@ class Post(models.Model):
     updated_at=models.DateTimeField(null=True)
     created_by = models.ForeignKey(User, related_name='posts', on_delete= models.CASCADE)
     updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete= models.CASCADE)
+    tags = models.ManyToManyField(Tags, related_name='posts')
     view_count = models.PositiveIntegerField(default=0)
     comment_count = models.PositiveIntegerField(default=0)
-
 
 class Comment(models.Model):
     message = models.TextField(max_length=400)

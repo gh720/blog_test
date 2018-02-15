@@ -69,14 +69,44 @@ class base_view_c:
 
 class post_create_view_c(base_view_c, CreateView):
     model = Post
-    fields = ('title', 'message',)
+    form_class = PostForm
+    # fields = ('title', 'message', 'tags')
+    initial = dict()
     template_name = 'new_post.html'
     pk_url_kwarg = 'post_pk'
     # context_object_name = 'something'
 
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(self.template_name, {'form':form})
+
+    def post(self,  request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.created_by = self.request.user
+            post.save()
+            return redirect('home')
+        return render(self.template_name, {'form': form})
+
+    # def form_valid(self, form):
+    #     post = form.save(commit=False)
+    #     post.created_by = self.request.user
+    #     post.save()
+    #     return redirect('home')
+
+
+class PostEditView(base_view_c, UpdateView):
+    model = Post
+    fields=('title','message','tags')
+    template_name = 'edit_post.html'
+    pk_url_kwarg='post_pk'
+    context_object_name='something'
+
     def form_valid(self, form):
-        post = form.save(commit=False)
-        post.created_by = self.request.user
+        post=form.save(commit=False)
+        post.updated_by=self.request.user
+        post.updated_at=timezone.now()
         post.save()
         return redirect('home')
 
@@ -117,20 +147,6 @@ class PostDetailsView(base_view_c, DetailView):
         ctx['comment_form']=ctx.get('comment_form', CommentForm())
         return ctx
 
-
-class PostEditView(base_view_c, UpdateView):
-    model = Post
-    fields=('title','message',)
-    template_name = 'edit_post.html'
-    pk_url_kwarg='post_pk'
-    context_object_name='something'
-
-    def form_valid(self, form):
-        post=form.save(commit=False)
-        post.updated_by=self.request.user
-        post.updated_at=timezone.now()
-        post.save()
-        return redirect('home')
 
 class login_view_c(base_view_c, LoginView):
     pass

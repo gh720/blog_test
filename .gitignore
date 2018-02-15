@@ -157,3 +157,5 @@ venv.bak/
 .mypy_cache/
 
 *.sqlite3
+
+static/fonts/*
