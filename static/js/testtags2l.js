@@ -1,4 +1,4 @@
-var setup_tags_input = function(input) {
+var setup_tags_input_test = function(input) {
     var items;
 
     function loadJSON(url, callback) {
@@ -14,7 +14,7 @@ var setup_tags_input = function(input) {
 
     loadJSON('/static/js/citynames.json', function (json) {
 
-        transform = function (json) {
+        var transform = function (json) {
             return $.map(json.items, function (item) {
                 return {
                     name: item.name,
@@ -23,13 +23,13 @@ var setup_tags_input = function(input) {
             });
         };
 
-        data = transform(json)
+        data = transform(json);
+        console.log('data', data)
 
-
-        var countries = new Bloodhound({
+        var citynames = new Bloodhound({
 
             datumTokenizer: function (datum) {
-                // console.log(datum)
+                console.log(datum)
                 return Bloodhound.tokenizers.whitespace(datum.name)
             },
             queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -56,28 +56,28 @@ var setup_tags_input = function(input) {
             }
         });
 
-        countries.initialize();
+        citynames.initialize();
 
         0 && $(input).typeahead(null, {
             // items:4,
             limit: 2,
-            // name: 'countries',
-            // source: countries,
+            // name: 'citynames',
+            // source: citynames,
             // displayKey: 'name',
             // displayKey: function (item){
             //    return item
             // },
             display: "name",
             // valueKey: 'name',
-            source: countries.ttAdapter()
+            source: citynames.ttAdapter()
         });
 
-        $(input).tagsinput({
+        1 && $(input).tagsinput({
             typeaheadjs: {
-                name: 'countries',
+                name: 'citynames',
                 displayKey: 'name',
                 valueKey: 'name',
-                source: countries.ttAdapter()
+                source: citynames.ttAdapter()
             }
         });
 

@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
@@ -8,29 +9,17 @@ from django.views.generic import ListView, UpdateView, DetailView, CreateView
 # import django.views.generic
 # django.views.generic.
 from posts.forms import PostForm, CommentForm
-from posts.models import Post, Comment
+from posts.models import Post, Comment, Tag
+
 
 def _get_form(request, cls, prefix):
     data = request.POST if prefix+"_submit" in request.POST else None
     return cls(data)
 
 
-
-
-# @login_required
-# def new_comment(request, post_pk):
-#     post = get_object_or_404(Post, pk=post_pk)
-#     if request.method=='POST':
-#         form=CommentForm(request.POST)
-#         if form.is_valid():
-#             comment=form.save(commit=False)
-#             comment.post=post
-#             comment.created_by=request.user
-#             comment.save()
-#             return redirect(reverse('post_details', kwargs={ 'post_pk': post.pk }))
-#         else:
-#             return redirect(reverse('post_details', kwargs={'post_pk': post.pk }), { 'form':form  })
-#             # return render(request, 'post_details.html', { 'post':post, 'form': form})
+def get_tags(request):
+    tags = [ { 'name': str(tag), 'id':tag.pk }  for tag in Tag.objects.all()]
+    return JsonResponse({ 'items': tags } )
 
 @login_required
 def remove_comment(request, post_pk, comment_pk):

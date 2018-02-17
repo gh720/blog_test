@@ -5,34 +5,56 @@
     Edit post
 {% endblock %}
 {% block content %}
-<form method="post" class="form_tags mb-4" novalidate>
+<form method="post" class="form_with_tags mb-4" novalidate>
     {% csrf_token %}
     {% include 'includes/form.html' %}
-    <button type="submit" class="btn btn-success">Save changes</button>
-    <a class="btn btn-secondary" href="{% url 'home' %}" role="button">Cancel</a>
-    <!--<input type="text" value="Amsterdam,Washington" data-role="tagsinput" />-->
-
     <input id="tags" type="hidden" />
-    <input id='tags_input' type="text" value="" data-role="tagsinput"/>
+    <div class="form_group_tags">
+        <!--<label for="tags_input" >Tags:</label>-->
+
+    </div>
+<input id='tags_input' class="tags_input" type="text" data-role="tagsinput"/>
     <br/>
-    <input id="typeahead" type="text" placeholder="1"/>
+    <!--<input id='tags_input2' class="tags_input typeahead" type="text"/>-->
     <br/>
-    <input id="typeahead2" type="text" placeholder="2"/>
-    <br/>
-    <input id="typeahead3" type="text" placeholder="3"/>
-    <br/>
+    <button type="submit" class="btn btn-primary">Save changes</button>
+    <a class="btn btn-secondary" href="{% url 'home' %}" role="button">Cancel</a>
 </form>
+{% endblock %}
+{% block mdlg_body %}
+<div>You are going to add new tags: <span id="new_tags"></span> Are you sure? </div>
 {% endblock %}
 {% block javascript %}
 
+<script src="{% static 'js/tags.js' %}"></script>
 <script src="{% static 'js/testtags2l.js' %}"></script>
 <script>
-    setup_tags_input($('#typeahead2'));
-    $('form.form_tags').submit(function(){
-        items = $('#tags_input').tagsinput('items')
-        $('#tags').val(JSON.stringify(items))
-        return true
-    })
+    var tags;
+    // 1 && loadJSON('{% url "tags" %}', function (json) {
+    1 && loadJSON('/static/js/citynames.json', function (json) {
+        console.log("working!!")
+        tags = json.items;
+        setup_tags_input($('#tags_input'),tags);
+        var confirmed = null;
+        $('form.form_tags').submit(function () {
+            if (confirmed !== null) {
+                return false;
+                // return confirmed
+            }
+            items = $('#tags_input').tagsinput('items');
+            confirm_items(tags, items, $('#modal_dialog'), function (excess) {
+                $('#new_tags').text(excess);
+            }, function (btn_id) {
+                confirmed = (btn_id == 'yes');
+            });
+
+            return false;
+        })
+    });
+</script>
+
+<script>
+    0 && setup_tags_input_test($('#tags_input2'));
 </script>
 
 {% endblock %}

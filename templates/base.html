@@ -6,7 +6,9 @@
     <title></title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" class="rel">
     <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}" class="rel">
+    <link rel="stylesheet" href="{% static 'css/tagsinput.css' %}" class="rel">
     <link rel="stylesheet" href="{% static 'css/app.css' %}" class="rel">
+    <!--<link rel="stylesheet" href="{% static 'css/typeahead.css' %}" class="rel">-->
     {% if 0 %}
         <link rel="stylesheet" href="/static/css/bootstrap.css" class="rel">
     {% endif %}
@@ -74,6 +76,30 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block modal_dialog %}
+<div id="modal_dialog" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{% block mdlg_title %}Confirmation{% endblock %}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          {% block mdlg_body %}<p>Are you sure?</p>{% endblock %}
+      </div>
+      <div class="modal-footer">
+        <button id="yes" type="button" class="yes btn btn-primary">{% block mdlg_yes %}Yes{% endblock %}</button>
+        <button id="no" type="button" class="cancel btn btn-secondary" data-dismiss="modal">
+            {% block mdlg_cancel %}No{% endblock %}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 <script src="{% static 'js/jquery-3.2.1.js' %}"></script>

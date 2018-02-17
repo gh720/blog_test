@@ -6,6 +6,9 @@ from django.urls import reverse
 class Tag(models.Model):
     tag = models.CharField(max_length=50)
 
+    def __str__(self):
+        return "%s" % (self.tag);
+
 class Post(models.Model):
     title = models.CharField(max_length=400)
     message = models.TextField(max_length=4000)

@@ -6,10 +6,10 @@ from posts.models import Post, Comment, Tag
 class PostForm(forms.ModelForm):
     # test = forms.MultipleChoiceField(choices=[('aaa', 'aaa'),('bbb','bbb'),('ccc','ccc')], widget=forms.CheckboxSelectMultiple(), required=False, label='test')
 
-    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)
+    # tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)
     class Meta:
         model=Post
-        fields=('title','message','tags')
+        fields=('title','message')
         labels=dict()
 
 class CommentForm(forms.ModelForm):
