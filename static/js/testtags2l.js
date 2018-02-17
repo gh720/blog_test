@@ -72,6 +72,7 @@ var setup_tags_input_test = function(input) {
             source: citynames.ttAdapter()
         });
 
+        console.log("instantiating tagsinput");
         1 && $(input).tagsinput({
             typeaheadjs: {
                 name: 'citynames',

@@ -92,9 +92,9 @@
           {% block mdlg_body %}<p>Are you sure?</p>{% endblock %}
       </div>
       <div class="modal-footer">
-        <button id="yes" type="button" class="yes btn btn-primary">{% block mdlg_yes %}Yes{% endblock %}</button>
-        <button id="no" type="button" class="cancel btn btn-secondary" data-dismiss="modal">
-            {% block mdlg_cancel %}No{% endblock %}
+        <button id="yes" type="button" class="yes btn btn-primary" data-dismiss="modal">{% block mdlg_yes %}Yes{% endblock %}</button>
+        <button id="cancel" type="button" class="cancel btn btn-secondary" data-dismiss="modal">
+            {% block mdlg_cancel %}Cancel{% endblock %}
         </button>
       </div>
     </div>

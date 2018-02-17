@@ -8,15 +8,12 @@
 <form method="post" class="form_with_tags mb-4" novalidate>
     {% csrf_token %}
     {% include 'includes/form.html' %}
-    <input id="tags" type="hidden" />
-    <div class="form_group_tags">
-        <!--<label for="tags_input" >Tags:</label>-->
-
+    <input id="tags" name="tags" type="hidden" />
+    <div class="form_group">
+        <label for="tags_input" >Tags:</label>
+        <input id='tags_input' class="tags_input" type="text" />
     </div>
-<input id='tags_input' class="tags_input" type="text" data-role="tagsinput"/>
-    <br/>
-    <!--<input id='tags_input2' class="tags_input typeahead" type="text"/>-->
-    <br/>
+
     <button type="submit" class="btn btn-primary">Save changes</button>
     <a class="btn btn-secondary" href="{% url 'home' %}" role="button">Cancel</a>
 </form>
@@ -30,22 +27,31 @@
 <script src="{% static 'js/testtags2l.js' %}"></script>
 <script>
     var tags;
-    // 1 && loadJSON('{% url "tags" %}', function (json) {
-    1 && loadJSON('/static/js/citynames.json', function (json) {
-        console.log("working!!")
+    loadJSON('{% url "tags" %}', function (json) {
         tags = json.items;
         setup_tags_input($('#tags_input'),tags);
         var confirmed = null;
-        $('form.form_tags').submit(function () {
+        var form;
+        $('form.form_with_tags').submit(function (e) {
             if (confirmed !== null) {
-                return false;
-                // return confirmed
+                console.log('real submit');
+                form=null;
+                return confirmed
             }
+            form=e.target;
+            console.log(form);
             items = $('#tags_input').tagsinput('items');
             confirm_items(tags, items, $('#modal_dialog'), function (excess) {
-                $('#new_tags').text(excess);
+                if (excess && excess.length) {
+                    $('#new_tags').text(excess);
+                }
             }, function (btn_id) {
-                confirmed = (btn_id == 'yes');
+                console.log('btn_id:' + btn_id);
+                confirmed = (btn_id === 'yes');
+                console.log('triggering submit...');
+                $('form.form_with_tags #tags').val(JSON.stringify(items));
+                console.log('set input #tags to:', JSON.stringify(items));
+                $(form).submit();
             });
 
             return false;
@@ -54,7 +60,10 @@
 </script>
 
 <script>
-    0 && setup_tags_input_test($('#tags_input2'));
+    setTimeout(function() {
+        0 && setup_tags_input_test($('#tags_input2'));
+    }, 0);
+
 </script>
 
 {% endblock %}

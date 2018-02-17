@@ -53,8 +53,9 @@ var ask_confirmation=function (input, callback) {
         $(this).closest('.modal').one('hidden.bs.modal', callback(id))
     };
 
-    $(input).children('#yes').one('click', closed);
-    $(input).children('#cancel').one('click', closed);
+    $(input).find('#yes').one('click', closed);
+    $(input).find('#cancel').one('click', closed);
+    $(input).modal('show');
 
 };
 
