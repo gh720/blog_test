@@ -5,10 +5,34 @@
     Edit post
 {% endblock %}
 {% block content %}
-<form method="post" class="mb-4" novalidate>
+<form method="post" class="form_tags mb-4" novalidate>
     {% csrf_token %}
     {% include 'includes/form.html' %}
     <button type="submit" class="btn btn-success">Save changes</button>
     <a class="btn btn-secondary" href="{% url 'home' %}" role="button">Cancel</a>
+    <!--<input type="text" value="Amsterdam,Washington" data-role="tagsinput" />-->
+
+    <input id="tags" type="hidden" />
+    <input id='tags_input' type="text" value="" data-role="tagsinput"/>
+    <br/>
+    <input id="typeahead" type="text" placeholder="1"/>
+    <br/>
+    <input id="typeahead2" type="text" placeholder="2"/>
+    <br/>
+    <input id="typeahead3" type="text" placeholder="3"/>
+    <br/>
 </form>
+{% endblock %}
+{% block javascript %}
+
+<script src="{% static 'js/testtags2l.js' %}"></script>
+<script>
+    setup_tags_input($('#typeahead2'));
+    $('form.form_tags').submit(function(){
+        items = $('#tags_input').tagsinput('items')
+        $('#tags').val(JSON.stringify(items))
+        return true
+    })
+</script>
+
 {% endblock %}

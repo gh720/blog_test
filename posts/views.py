@@ -78,16 +78,19 @@ class post_create_view_c(base_view_c, CreateView):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(initial=self.initial)
-        return render(self.template_name, {'form':form})
+        return render(request,self.template_name, {'form':form})
 
     def post(self,  request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
+        form = self.form_class(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.created_by = self.request.user
             post.save()
+            form.save_m2m()
             return redirect('home')
-        return render(self.template_name, {'form': form})
+        else:
+            debug=1
+        return render(request, self.template_name, {'form': form})
 
     # def form_valid(self, form):
     #     post = form.save(commit=False)
@@ -98,17 +101,38 @@ class post_create_view_c(base_view_c, CreateView):
 
 class PostEditView(base_view_c, UpdateView):
     model = Post
-    fields=('title','message','tags')
+    form_class = PostForm
+
+    # fields=('title','message','tags')
     template_name = 'edit_post.html'
     pk_url_kwarg='post_pk'
     context_object_name='something'
 
-    def form_valid(self, form):
-        post=form.save(commit=False)
-        post.updated_by=self.request.user
-        post.updated_at=timezone.now()
-        post.save()
-        return redirect('home')
+    # def get(self, request, *args, **kwargs):
+    #     form = self.form_class(initial=self.initial)
+    #     return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form(self.form_class)
+        # form = self.form_class(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.updated_by = self.request.user
+            post.updated_at = timezone.now()
+            post.save()
+            form.save_m2m()
+            return redirect('home')
+        else:
+            debug = 1
+        return render(request, self.template_name, {'form': form})
+
+    # def form_valid(self, form):
+    #     post=form.save(commit=False)
+    #     post.updated_by=self.request.user
+    #     post.updated_at=timezone.now()
+    #     post.save()
+    #     return redirect('home')
 
 
 class PostListView(base_view_c, ListView):
