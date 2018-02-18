@@ -9,20 +9,22 @@ var loadJSON = function (url, callback) {
     xobj.send(null);
 };
 
-var setup_tags_input = function(input,items) {
+var setup_tags_input = function(input, current_items, items) {
     var transform = function (items) {
         return $.map(items, function (item) {
-            return {
-                name: item.name,
-                id: item.id
-            };
+            // return {
+            //     name: item.name,
+            //     id: item.id
+            // };
+            return item.name;
         });
     };
 
     data = transform(items);
     var item_trie = new Bloodhound({
         datumTokenizer: function (datum) {
-            return Bloodhound.tokenizers.whitespace(datum.name)
+            return Bloodhound.tokenizers.whitespace(datum);
+            // return Bloodhound.tokenizers.whitespace(datum.name)
         },
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         local: data
@@ -31,14 +33,40 @@ var setup_tags_input = function(input,items) {
 
     console.log('current items:', data);
 
-    $(input).tagsinput({
+    var elt = $(input);
+
+    elt.tagsinput({
+        // itemValue: 'id',
+        // itemText: 'name',
+        // confirmKeys: [13, 32, 39, 188],
         typeaheadjs: {
             name: 'item_trie',
-            displayKey: 'name',
-            valueKey: 'name',
+            // displayKey: 'name',
+            // valueKey: 'name',
             source: item_trie.ttAdapter()
         }
     });
+    for (var item of  current_items) {
+        // var _item = {"name": item.name, "id": item.id};
+        // console.log('added :', item);
+        elt.tagsinput('add', item.name);
+    }
+    // $('.bootstrap-tagsinput input').on('keyup keypress', function(e){
+    //     console.log('prevented!');
+    //     if ((e.keyCode || e.which) == 13){
+    //         e.preventDefault();
+    //         return false;
+    //     };
+    // });
+
+
+    // $(".twitter-typeahead > input").focus(function(){
+    //     //disable btn when focusing the input
+    //     $("#my_submit_button").prop('disabled', true);
+    // }).blur(function(){
+    //     //enable btn when bluring the input
+    //     $("#my_submit_button").prop('disabled', false);
+    // });
 
 
     // $(input).bind('typeahead:render', function (ev, sugg, flag, name) {
@@ -61,8 +89,10 @@ var ask_confirmation=function (input, callback) {
 
 let confirm_items = function (old_items, new_items, input, show_excess_cb, cb) {
     excess_items = [];
+    onames=$.map(old_items, function(v,i,a) { return v.name});
+    // onames=$.map(old_items, function(v,i,a) { return v});
     for (var item of new_items) {
-        if (!(item in old_items)) {
+        if (onames.indexOf(item)==-1) {
             excess_items.push(item)
         }
     }
@@ -71,7 +101,7 @@ let confirm_items = function (old_items, new_items, input, show_excess_cb, cb) {
         return;
     }
     if (show_excess_cb) {
-        show_excess_cb(excess_items.join(","));
+        show_excess_cb($.map(excess_items, function(v) { return '"'+v+'"'}).join(","));
     }
     ask_confirmation(input, cb);
 };

@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.http import JsonResponse
@@ -8,8 +10,12 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, UpdateView, DetailView, CreateView
 # import django.views.generic
 # django.views.generic.
+from django.views.generic.detail import SingleObjectMixin
+
 from posts.forms import PostForm, CommentForm
 from posts.models import Post, Comment, Tag
+
+import re
 
 
 def _get_form(request, cls, prefix):
@@ -101,6 +107,15 @@ class PostEditView(base_view_c, UpdateView):
     #     form = self.form_class(initial=self.initial)
     #     return render(request, self.template_name, {'form': form})
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        post_pk = self.object.pk
+        ctx=super().get_context_data(**kwargs)
+        ptags= self.object.tags.all()
+        tags=[ { 'name': str(tag),'id': tag.id } for tag in ptags]
+
+        ctx['current_tags']=json.dumps(tags)
+        return ctx
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form(self.form_class)
@@ -110,7 +125,29 @@ class PostEditView(base_view_c, UpdateView):
             post.updated_by = self.request.user
             post.updated_at = timezone.now()
             post.save()
-            form.save_m2m()
+            tags_json = self.request.POST.get('tags')
+            if tags_json:
+                tags = json.loads(tags_json)
+                current_tags = {str(tag): tag.pk for tag in Tag.objects.all()}
+
+                for tag_name in tags:
+                    tag=None
+                    if tag_name not in current_tags:
+                        tag = Tag.objects.create(tag=tag_name)
+                        tag.save()
+                        print("created new tag: %s" % (str(tag)))
+                    else:
+                        tag=Tag.objects.get(tag=tag_name)
+                    post.tags.add(tag)
+                    print("added tag: %s" % (str(tag)))
+
+                for tag_name in current_tags:
+                    if tag_name not in tags:
+                        tag = Tag.objects.get(tag=tag_name)
+                        post.tags.remove(tag)
+                        print("removed tag: %s" % (str(tag)))
+
+            # form.save_m2m()
             return redirect('home')
         else:
             debug = 1

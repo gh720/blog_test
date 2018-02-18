@@ -464,25 +464,34 @@
         $input.attr('size', Math.max(this.inputSize, size));
       }, self));
 
+      console.log(self.$container);
+      console.log(self.$input);
       self.$container.on('keypress', 'input', $.proxy(function(event) {
+         console.log('proxy...');
          var $input = $(event.target);
 
          if (self.$element.attr('disabled')) {
+             console.log("why?");
             self.$input.attr('disabled', 'disabled');
             return;
          }
 
          var text = $input.val(),
          maxLengthReached = self.options.maxChars && text.length >= self.options.maxChars;
+          console.log("relevant:", [self.options.freeInput, maxLengthReached, event.which]);
          if (self.options.freeInput && (keyCombinationInList(event, self.options.confirmKeys) || maxLengthReached)) {
+             console.log('adding...');
             // Only attempt to add a tag if there is data in the field
             if (text.length !== 0) {
+               console.log('text.length!=0...');
+
                self.add(maxLengthReached ? text.substr(0, self.options.maxChars) : text);
                $input.val('');
             }
 
             // If the field is empty, let the event triggered fire as usual
             if (self.options.cancelConfirmKeysOnEmpty === false) {
+                console.log('prevented...');
                 event.preventDefault();
             }
          }
