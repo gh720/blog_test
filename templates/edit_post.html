@@ -18,14 +18,16 @@
     <a class="btn btn-secondary" href="{% url 'home' %}" role="button">Cancel</a>
 </form>
 
+
 {% endblock %}
 {% block mdlg_body %}
 <div>You are going to add new tags: <span id="new_tags"></span> Are you sure? </div>
 {% endblock %}
 {% block javascript %}
 
+<script src="{% static 'js/simplemde.min.js' %}"></script>
+<script> var simplemde = new SimpleMDE(); </script>
 <script src="{% static 'js/tags.js' %}"></script>
-<script src="{% static 'js/testtags2l.js' %}"></script>
 <script>
     var tags;
     loadJSON('{% url "tags" %}', function (json) {
@@ -72,13 +74,6 @@
             return false;
         })
     });
-</script>
-
-<script>
-    setTimeout(function() {
-        0 && setup_tags_input_test($('#tags_input2'));
-    }, 0);
-
 </script>
 
 {% endblock %}

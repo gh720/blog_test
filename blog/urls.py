@@ -34,4 +34,6 @@ urlpatterns = [
     # url(r'^posts/(?P<post_pk>\d+)/new_comment/$', posts_views.PostDetailsView.as_view(), name='new_comment'),
     url(r'^posts/(?P<post_pk>\d+)/comments/(?P<comment_pk>\d+)/delete/$', posts_views.remove_comment, name='remove_comment'),
     url(r'^tags/$', posts_views.get_tags, name='tags'),
+    url(r'^profile/(?P<user_pk>\d+)/edit/$', account_views.profile_edit_view_c.as_view(), name='edit_profile'),
+    url(r'^profile/(?P<user_pk>\d+)/$', account_views.profile_view_c.as_view(), name='profile'),
 ]

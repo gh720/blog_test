@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    User profile
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="profile_image">
+                <img src="{{ profile.image_url }}"/>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="profile_data">
+                <table class="table">
+                    <thead></thead>
+                    <tbody>
+                        <tr><td><strong>Name:</strong></td><td>{{ profile.user.name }}</td></tr>
+                        <tr><td><strong>E-Mail:</strong></td><td>{{ profile.user.email }}</td></tr>
+                        <tr><td><strong>Location:</strong></td><td>{{ profile.location }}</td></tr>
+                        <tr><td><strong>Gender:</strong></td><td>{{ profile.gender }}</td></tr>
+                        <tr><td><strong>Profession:</strong></td><td>{{ profile.profession }}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="">
+                        <div class="form-group">
+                            <textarea class="form-control" placeholder="Your comment..."></textarea>
+                        </div>
+                    </form>
+                    <button type="submit">Comment</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
