@@ -14,10 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
 
+from blog import settings
 from posts import views as posts_views
 from accounts import views as account_views
 
@@ -34,6 +36,9 @@ urlpatterns = [
     # url(r'^posts/(?P<post_pk>\d+)/new_comment/$', posts_views.PostDetailsView.as_view(), name='new_comment'),
     url(r'^posts/(?P<post_pk>\d+)/comments/(?P<comment_pk>\d+)/delete/$', posts_views.remove_comment, name='remove_comment'),
     url(r'^tags/$', posts_views.get_tags, name='tags'),
-    url(r'^profile/(?P<user_pk>\d+)/edit/$', account_views.profile_edit_view_c.as_view(), name='edit_profile'),
+    url(r'^profile/(?P<profile_pk>\d+)/edit/$', account_views.profile_edit_view_c.as_view(), name='edit_profile'),
     url(r'^profile/(?P<user_pk>\d+)/$', account_views.profile_view_c.as_view(), name='profile'),
 ]
+
+if settings.DEBUG:
+    urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

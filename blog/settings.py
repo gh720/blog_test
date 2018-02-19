@@ -131,3 +131,6 @@ STATICFILES_DIRS = [
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL='login'
+
+MEDIA_ROOT = "E:/work/devel/web/frameworks/django/blog/uploads"
+MEDIA_URL = '/uploads/'

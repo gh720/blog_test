@@ -9,20 +9,11 @@
 {# {% comment %} #}
 {% for field in form %}
     {% if form %}
-    <div class="_form-group">
-        {{ field.label_tag }}<br/>
-            {% render_field field class=field|input_class %}
-            {% for error in field.errors %}
-                <div class="invalid-feedback">
-                    {{ error }}
-                </div>
-            {% endfor %}
-        {% if field.help_text %}
-        <small class="form-text text-muted">
-            {{ field.help_text|safe }}
-        </small>
+        {% if field.field.render_image %}
+            {% include 'form_field_img.html' %}
+        {% else %}
+            {% include 'form_field.html' %}
         {% endif %}
-    </div>
     {% endif %}
 {% endfor %}
 {# {% endcomment %} #}

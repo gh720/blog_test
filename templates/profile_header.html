@@ -1,0 +1,5 @@
+<div class="row">
+    <h5><strong>{{ profile.user.username }} Profile <br/>
+        {% if profile_edit %} <a href="{% url 'edit_profile' profile.pk %}"> <i class="fas fa-pencil-alt"> Edit</i></a>{% endif %}
+    </strong></h5>
+</div>

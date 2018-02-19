@@ -8,19 +8,21 @@
 {% block content %}
 
 <div class="container">
+    {% include 'profile_header.html' with profile_edit=True %}
     <div class="row">
         <div class="col-md-4">
             <div class="profile_image">
-                <img src="{{ profile.image_url }}"/>
+                <img src="{{ profile.profile_image.url }}"/>
             </div>
         </div>
         <div class="col-md-8">
             <div class="profile_data">
-                <table class="table">
+                <table class="profile_table table">
                     <thead></thead>
                     <tbody>
-                        <tr><td><strong>Name:</strong></td><td>{{ profile.user.name }}</td></tr>
+                        <tr><td><strong>Name:</strong></td><td>{{ profile.user.username }}</td></tr>
                         <tr><td><strong>E-Mail:</strong></td><td>{{ profile.user.email }}</td></tr>
+                        <tr><td><strong>Birth date:</strong></td><td>{{ profile.birth_date }}</td></tr>
                         <tr><td><strong>Location:</strong></td><td>{{ profile.location }}</td></tr>
                         <tr><td><strong>Gender:</strong></td><td>{{ profile.gender }}</td></tr>
                         <tr><td><strong>Profession:</strong></td><td>{{ profile.profession }}</td></tr>

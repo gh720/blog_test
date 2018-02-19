@@ -6,7 +6,9 @@
 {% endblock %}
 {% block content %}
 
-<form method="post" class="mb-4" novalidate>
+{% include 'profile_header.html' with profile_edit=False %}
+
+<form method="post" enctype="multipart/form-data" class="mb-4" novalidate>
     {% csrf_token %}
     {% include 'includes/form.html' %}
     <button type="submit" class="btn btn-primary">Save changes</button>
