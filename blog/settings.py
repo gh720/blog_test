@@ -134,3 +134,5 @@ LOGIN_URL='login'
 
 MEDIA_ROOT = "E:/work/devel/web/frameworks/django/blog/uploads"
 MEDIA_URL = '/uploads/'
+
+PROFILE_IMAGE_SIZE=(100,100)

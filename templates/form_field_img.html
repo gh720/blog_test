@@ -3,7 +3,9 @@
     {{ field.label_tag }}
     <div class="row">
         <div class="profile_image col-md-4">
-            <img src="{{field.field.render_image_path }}"/>
+            {% if field.field.render_image_url %}
+            <img src="{{field.field.render_image_url }}"/>
+            {% endif %}
         </div>
     </div>
     {% render_field field class=field|input_class %}

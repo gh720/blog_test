@@ -15,16 +15,18 @@ class SignUpForm(UserCreationForm):
         fields=('username', 'email',  'password1', 'password2')
 
 class profile_edit_form_c(forms.ModelForm):
+    profile_image = forms.ImageField(widget=forms.FileInput)
     class Meta:
         model = profile_c
         fields=('date_of_birth', 'location', 'gender', 'profession', 'profile_image')
+        # widgets = {'profile_image': forms.ClearableFileInput }
 
     def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None, initial=None, error_class=ErrorList,
                  label_suffix=None, empty_permitted=False, instance=None, use_required_attribute=None):
         super().__init__(data, files, auto_id, prefix, initial, error_class, label_suffix, empty_permitted, instance,
                          use_required_attribute)
         self.fields['profile_image'].render_image = 1
-        self.fields['profile_image'].render_image_path=self.instance.profile_image.url
+        self.fields['profile_image'].render_image_url=self.instance.thumb_url
 
 
 
