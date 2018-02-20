@@ -1,0 +1,5 @@
+This message was sent because the password reset procedure was initiated for account {{ email }}.
+If you are not aware of this, ignore this e-mail.
+Otherwise, if you want to continue the reset procedure, click the link below or enter it in your browser address field:
+{{ protocol }}://{{domain}}{% url "pass_reset_confirm" uidb64=uid token=token %}
+Your account name is {{ user.get_username }}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Change password
+{% endblock %}
+
+{% block content %}
+
+<h1> Reseting password </h1>
+<p>Enter your e-mail to obtain a new password.</p>
+
+<form method="post" class="form-group">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="form-control" value="Send e-mail"></button>
+</form>
+
+{% endblock %}

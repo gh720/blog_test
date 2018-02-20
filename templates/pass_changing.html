@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Change password
+{% endblock %}
+
+{% block content %}
+
+<h1> Change your password </h1>
+<form method="post" class="form-group">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="form-control" value="Change"></button>
+</form>
+
+{% endblock %}

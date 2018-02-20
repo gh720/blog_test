@@ -136,3 +136,5 @@ MEDIA_ROOT = "E:/work/devel/web/frameworks/django/blog/uploads"
 MEDIA_URL = '/uploads/'
 
 PROFILE_IMAGE_SIZE=(100,100)
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

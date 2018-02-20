@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Resetting password
+{% endblock %}
+
+{% block content %}
+
+<h1>Password reset done</h1>
+<p>Your password has been set</p>
+<p>You can <a href="{% url 'login' %}">Log in</a> now</p>
+
+{% endblock %}

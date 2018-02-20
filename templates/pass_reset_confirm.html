@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Resetting password
+{% endblock %}
+
+{% block content %}
+
+<h1> Reseting password </h1>
+{% if validlink %}
+<p>Please enter your new password twice:</p>
+<form method="post" class="form-group">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="form-control" value="Change my password"></button>
+</form>
+{% else %}
+<p>The password reset link is invalid, possibly because is has already been used. </p>
+<p>Please, request a new password reset</p>
+{% endif %}
+
+{% endblock %}
