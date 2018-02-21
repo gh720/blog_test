@@ -1,6 +1,18 @@
-/*.navbar-brand {*/
-    /*font-family: 'Sans-Serif', cursive;*/
-/*}*/
+.navbar-brand {
+    font-family: sans-serif;
+    text-shadow: 2px 2px 1px #777;
+    font-size: 24px;
+    /*color: #eee !important;*/
+}
+
+.navbar  {
+    background-image: linear-gradient(180deg, #b3f8ff 0%, #43ebff 10%, #049bb8 90%, #ffffff 100%  );
+}
+
+
+.content {
+    margin-top:50px;
+}
 
 .sidebar {
     background-color: #eee;
