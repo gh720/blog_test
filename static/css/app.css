@@ -1,14 +1,53 @@
-.navbar-brand {
+.navbar_main  {
+    background-image: linear-gradient(160deg, #ffffff 0%, rgb(1, 223, 230) 100% );
+    box-shadow: 0 0 2px #0b2e13;
+    padding:0;
+    margin:0;
+}
+
+.navbar_main .navbar-brand {
     font-family: sans-serif;
-    text-shadow: 1px 1px 1px #777;
+    text-shadow: 1px 1px 0px #777;
     font-size: 24px;
-    color: #b2b205 !important;
+    color: #ffcd02 !important;
 }
 
-.navbar  {
-    background-image: linear-gradient(180deg, #d5fcff 0%, #5aecff 10%, #5aecff 90%,  #ffffff 100%  );
+.navbar_main .nav-item {
+    font-size: 20px;
 }
 
+.navbar_main a  {
+    padding:0;
+}
+
+.navbar_main img {
+    max-width: 3em;
+    max-height:3em;
+    padding:0;
+}
+
+.panel_heading {
+    background-image: linear-gradient(160deg, #ffffff 0%, rgb(1, 223, 230) 100% );
+    text-shadow: 1px 1px 0px #777;
+    box-shadow: 1px 1px 0px #0b2e13;
+    color: #ffcd02 !important;
+    padding: 5px 0 5px 10px;
+}
+
+/*.panel_heading  button {*/
+    /*margin: 5px 0 5px 0;*/
+/*}*/
+
+/*.panel_heading h5 {*/
+    /*display: inline-block !important;*/
+/*}*/
+
+
+
+/*.navbar li {*/
+    /*border: solid;*/
+    /*border-width: 0 1px 0 1px ;*/
+/*}*/
 
 .content {
     margin-top:60px;

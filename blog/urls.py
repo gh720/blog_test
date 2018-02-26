@@ -49,6 +49,8 @@ urlpatterns = [
         , posts_views.password_reset_complete_view_c.as_view(template_name='pass_reset_complete.html'), name='pass_reset_complete'),
 
 
+    url(r'posts/logo_image/$', gen_views.lightning_image_c.as_view(), name='lightning_logo'),
+
 ]
 
 if settings.DEBUG:
