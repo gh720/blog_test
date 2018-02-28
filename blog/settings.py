@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'formtools',
     'widget_tweaks',
     'accounts',
     'posts',
@@ -134,6 +135,8 @@ LOGIN_URL='login'
 
 MEDIA_ROOT = "E:/work/devel/web/frameworks/django/blog/uploads"
 MEDIA_URL = '/uploads/'
+
+AUXILIARY_RESOURCES = "E:/work/devel/web/frameworks/django/blog/aux_resources"
 
 PROFILE_IMAGE_SIZE=(100,100)
 

@@ -1,11 +1,14 @@
-from PIL import Image, ImageDraw, ImageTk, ImageFilter, ImageColor
+from PIL import Image, ImageDraw, ImageFilter, ImageColor
 import random
 import tempfile
 import math
-import time
 import numpy
 
+
 from blend_modes import blend_modes
+
+from blog import settings
+
 
 class ddot(dict):
     def __init__(self, *args, **kwargs):
@@ -239,7 +242,6 @@ def draw_segments(draw, segments, color):
         draw.line([seg.start.y,seg.start.x,seg.end.y, seg.end.x], width = width, fill=color)
 
 def save_image(image):
-
     if image.mode!='RGB':
         image = image.convert('RGB')
     tmp_file = tempfile.NamedTemporaryFile(mode='w+b', delete=False, dir='.', suffix='.jpg')
@@ -247,7 +249,50 @@ def save_image(image):
     image.save(tmp_file)
     tmp_file.close()
 
-def generate_lightning_image():
+def make_glow(image):
+    blurred_images = []
+    for i in [4, 8, 16]:
+        blurred_images.append(image.filter(ImageFilter.GaussianBlur(radius=i)))
+    b_image1 = numpy.array(image).astype(float)
+    b_images = []
+    for b_image in blurred_images:
+        b_images.append(numpy.array(b_image).astype(float))
+
+    composite_image_numpy = b_image1
+    opacity = 1
+
+    for b_image in b_images:
+        composite_image_numpy = blend_modes.addition(composite_image_numpy, b_image, opacity)
+
+    composite_image_8 = numpy.uint8(composite_image_numpy)
+    composite_image = Image.fromarray(composite_image_8)
+    return composite_image
+
+
+def image_to_blend(image):
+    np_image = numpy.array(image)  # Inputs to blend_modes need to be numpy arrays.
+    image_float = np_image.astype(float)  # Inputs to blend_modes need to be floats.
+    return image_float
+
+def image_from_blend(image):
+    blended_img = numpy.uint8(image)
+    blended_img_raw = Image.fromarray(blended_img)
+    return blended_img_raw
+
+def load_image(file):
+    image = Image.open(file)  # RGBA image
+    return image
+
+def generate_lightning_logo():
+    image1 = generate_lightning_image((256, 256))
+    logo_file_path = "%s/%s" % (settings.AUXILIARY_RESOURCES, 'logo_letters.png')
+    image2 = load_image(logo_file_path)
+    image = blend_modes.addition(image_to_blend(image1), image_to_blend(image2), opacity=1)
+    # save_image(image_from_blend(image))
+    return image_from_blend(image)
+
+
+def generate_lightning_image(size):
     WHITE = (255, 255, 255, 255)
     BLACK = (0,0,0, 255)
     BLUE = "#0000ff"
@@ -264,10 +309,10 @@ def generate_lightning_image():
         seed = random.randint(0,100000)
     random.seed(seed)
 
-    size = (600,600)
+    size = size or (600,600)
 
-    start_point = Point(10,300)
-    end_point = Point(500,300)
+    start_point = Point(10,int(size[1]/2))
+    end_point = Point(size[0]-10,int(size[1]/2))
 
     max_level=5
     max_branches=100
@@ -275,14 +320,11 @@ def generate_lightning_image():
     # segments = create_bolt(start_point, end_point, 1)
 
     image_mode='RGBA'
-    image = Image.new(image_mode, size, BLACK_TRANS)
+    image = Image.new(image_mode, size, BLACK)
     draw = ImageDraw.Draw(image)
 
-    print("random seed: %d" % (seed))
-
-    blur=True
-
-    lb_it=None
+    # image.paste(BLACK, [0, 0, image.size[0], image.size[1]]) # this is somehow crucial
+    # blur doesn't work on transparent colors ?
 
     lightning = lightning_c(start_point, end_point, max_level=max_level, max_branches=max_branches,
                             max_branch_charge=20, dissipation_rate=.99 / 30)
@@ -292,23 +334,7 @@ def generate_lightning_image():
         draw_segments(draw, segments, LIGHTBLUE)
 
     surf = None
-    b_image1 = numpy.array(image).astype(float)
+    composite_image = make_glow(image)
+    return composite_image
 
-    blurred_images = []
-    for i in [4, 8, 16]:
-        blurred_images.append(image.filter(ImageFilter.GaussianBlur(radius=i)))
-    b_images = []
-    for b_image in blurred_images:
-        b_images.append(numpy.array(b_image).astype(float))
-
-    composite_image_numpy = b_image1
-    opacity = 1
-
-    for b_image in b_images:
-        composite_image_numpy = blend_modes.addition(composite_image_numpy, b_image, opacity)
-
-    composite_image_8 = numpy.uint8(composite_image_numpy)
-    composite_image = Image.fromarray(composite_image_8)
-
-    save_image(composite_image)
 

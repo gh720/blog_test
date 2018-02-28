@@ -1,10 +1,4 @@
-{% extends 'base.html' %}
 {% load static %}
-
-{% block title %}
-    New post
-{% endblock %}
-{% block content %}
 <form method="post" class="form_with_tags mb-4" novalidate>
     {% csrf_token %}
     {% include 'includes/form.html' %}
@@ -14,15 +8,13 @@
         <input id='tags_input' data-current_tags="{{ current_tags }}" class="tags_input" type="text" />
     </div>
 
-    <button type="submit" class="btn btn-success">Save new post</button>
+    <button type="submit" class="btn btn-primary">Save changes</button>
     <a class="btn btn-secondary" href="{% url 'home' %}" role="button">Cancel</a>
 </form>
-{% endblock %}
 
 {% block mdlg_body %}
 <div>You are going to add new tags: <span id="new_tags"></span> Are you sure? </div>
 {% endblock %}
-
 {% block javascript %}
 
 <script src="{% static 'js/simplemde.min.js' %}"></script>
@@ -33,6 +25,7 @@
     loadJSON('{% url "tags" %}', function (json) {
         elt = $('#tags_input');
         tags = json.items;
+
         current_tags_json = elt.attr('data-current_tags');
         console.log('current_tags: ', current_tags_json);
         current_tags = []
@@ -53,14 +46,6 @@
                 console.log("something wrong");
                 return;
             }
-            // debugger;
-            // if (confirmed !== null) {
-            //     console.log('real submit');
-            //     _c = confirmed
-            //     form=null;
-            //     confirmed=null;
-            //     return _c;
-            // }
             form=e.target;
             console.log('tags:' , tags);
             items = elt.tagsinput('items');

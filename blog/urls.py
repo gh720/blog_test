@@ -20,8 +20,9 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 
 from blog import settings
-from posts import views as posts_views
+from posts import views as posts_views, gen_views
 from accounts import views as account_views
+from posts.forms import PostForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +31,8 @@ urlpatterns = [
     url(r'^login/$', posts_views.login_view_c.as_view(template_name='login.html'), name='login'),
     url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
     url(r'^signup/$', account_views.signup, name='signup'),
-    url(r'^posts/(?P<post_pk>\d+)/edit/$', posts_views.PostEditView.as_view(), name='edit_post'),
+    url(r'^posts/(?P<post_pk>\d+)/edit/$', posts_views.post_edit_form_preview_c(PostForm), name='edit_post'),
+    # url(r'^posts/(?P<post_pk>\d+)/edit/$', posts_views.PostEditView.as_view(), name='edit_post'),
     url(r'^posts/new_post/$', posts_views.post_create_view_c.as_view(), name='new_post'),
     url(r'^posts/(?P<post_pk>\d+)/delete/$', posts_views.remove_post, name='remove_post'),
     # url(r'^posts/(?P<post_pk>\d+)/new_comment/$', posts_views.PostDetailsView.as_view(), name='new_comment'),
@@ -49,7 +51,7 @@ urlpatterns = [
         , posts_views.password_reset_complete_view_c.as_view(template_name='pass_reset_complete.html'), name='pass_reset_complete'),
 
 
-    url(r'posts/logo_image/$', gen_views.lightning_image_c.as_view(), name='lightning_logo'),
+    url(r'posts/logo_image/$', gen_views.lightning_logo_view_c.as_view(), name='lightning_logo'),
 
 ]
 

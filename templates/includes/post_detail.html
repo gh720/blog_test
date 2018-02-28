@@ -1,0 +1,33 @@
+{% load static %}
+    <div class="w-100 pl-4">
+        <a href="#"><h2 class="w-100 mb-0">{{ post.title }}</h2></a>
+    </div>
+    <div class="w-100">
+        <hr class="my-1 "/>
+    </div>
+
+    <div class="col-2">
+        <img src="{% static 'img/avatar.svg' %}" alt="{{ post.created_by.username }}" class="w-100 author_image"/>
+        <div class="text-center"><span class="poster_rank_icon"><i class="fas fa-chess-queen"></i></span>
+            <small>Posts:</small>
+            <small> {{ post.created_by.posts.count }}</small>
+        </div>
+    </div>
+    <div class="col-10">
+        <div class="card border-0">
+            <div class="card-title">
+<span class="text-info">
+        <span class="username">{{ post.created_by.username }}</span>
+        <i class="fas fa-bolt"></i> <span>Last updated: {{ post.created_at }}</span>
+    </span>
+
+            </div>
+            <div class="card-body">
+
+                <div class="post_excerpt row mb-3">
+                    {{ post.message }}
+                </div>
+
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+
+        <div class="heading_info">
+            <h5 class="p-1 mb-0 mx-2">{% trans "Check your submission" %}</h5>
+            <form action="" method="post">{% csrf_token %}
+                {% for field in form %}{{ field.as_hidden }}
+                {% endfor %}
+                <input type="hidden" name="{{ stage_field }}" value="2"/>
+                <input type="hidden" name="{{ hash_field }}" value="{{ hash_value }}"/>
+                <input type="submit" class="btn btn-primary" value="{% trans 'Submit' %}"/>
+            </form>
+        </div>
+        <hr class="my-2"/>
+
+        <div>{% include 'includes/post_detail.html' with post=post_preview %}</div>
+
+        <hr class="my-2"/>
+
+        <p display="none">{% blocktrans %}Security hash: {{ hash_value }}{% endblocktrans %}</p>
+        <div class="heading_info">
+            <h5 class="p-1 mb-0 mx-2">{% trans "Edit your submission" %}</h5>
+        </div>
+        {% include 'includes/post_form.html' %}
+    </div>
+</div>
+{% endblock %}

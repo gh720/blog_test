@@ -4,16 +4,15 @@
 <head>
     <meta charset="utf-8">
     <title></title>
+    {# <!--<link rel="stylesheet" href="{% static 'css/typeahead.css' %}" class="rel">--> #}
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" class="rel">
     <link rel="stylesheet" href="{% static 'css/fontawesome-all.css' %}" class="rel">
     <link rel="stylesheet" href="{% static 'css/tagsinput.css' %}" class="rel">
     <link rel="stylesheet" href="{% static 'css/simplemde.min.css' %}" class="rel">
     <link rel="stylesheet" href="{% static 'css/app.css' %}" class="rel">
-    <!--<link rel="stylesheet" href="{% static 'css/typeahead.css' %}" class="rel">-->
     {% if 0 %}
         <link rel="stylesheet" href="/static/css/bootstrap.css" class="rel">
     {% endif %}
-
     {% block stylesheet %}
     {% endblock %}
 </head>
@@ -21,7 +20,6 @@
 {% block body %}
     <nav class="navbar navbar_main navbar-expand-lg navbar-light bg-light fixed-top">
         <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'img/a83s.png'%}" alt="AI"/>
             My Blog
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu"
@@ -63,16 +61,22 @@
 
     <div class="container content">
         <div class="row">
-            <div class="col-lg-8">
-                {% block content %}
-                {% endblock %}
-            </div>
             <div class="col-lg-4 sidebar" >
+
                 <div class="card">
                     <div class="card-body">
+                        <div class="card-img text-center mb-2">
+                            <div>
+                                <img src="{% url 'lightning_logo' %}" alt="AI"/>
+                                <span class="text-muted d-block">My blog about Artificial Intelligence</span>
+                            </div>
+
+                        </div>
+
                         <div class="panel_heading">
                             <h5 class="my-1">Latest Posts</h5>
                         </div>
+
                         <div class="latest">
                             <ul>
                                 {% for post in latest_posts %}
@@ -93,6 +97,11 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-8">
+                {% block content %}
+                {% endblock %}
+            </div>
+
         </div>
     </div>
 
