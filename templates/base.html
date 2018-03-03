@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title></title>
     {# <!--<link rel="stylesheet" href="{% static 'css/typeahead.css' %}" class="rel">--> #}
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" class="rel">
+    <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.css' %}" class="rel">
     <link rel="stylesheet" href="{% static 'css/fontawesome-all.css' %}" class="rel">
     <link rel="stylesheet" href="{% static 'css/tagsinput.css' %}" class="rel">
     <link rel="stylesheet" href="{% static 'css/simplemde.min.css' %}" class="rel">
@@ -18,7 +18,7 @@
 </head>
 <body>
 {% block body %}
-    <nav class="navbar navbar_main navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar app_navbar_main navbar-light navbar-expand-lg  bg-light fixed-top">
         <a class="navbar-brand" href="{% url 'home' %}">
             My Blog
         </a>
@@ -59,9 +59,9 @@
         </div>
     </nav>
 
-    <div class="container content">
+    <div class="container-fluid app_content">
         <div class="row">
-            <div class="col-lg-4 sidebar" >
+            <div class="col-lg-4 app_sidebar" >
 
                 <div class="card">
                     <div class="card-body">
@@ -73,19 +73,19 @@
 
                         </div>
 
-                        <div class="panel_heading">
+                        <div class="app_panel_heading">
                             <h5 class="my-1">Latest Posts</h5>
                         </div>
 
-                        <div class="latest">
+                        <div class="app_latest">
                             <ul>
                                 {% for post in latest_posts %}
                                 <li><a href="{% url 'post_details' post.pk %}">{{post.title}}</a></li>
                                 {% endfor %}
                             </ul>
                         </div>
-                        <div class="popular">
-                            <div class="panel_heading">
+                        <div class="app_popular">
+                            <div class="app_panel_heading">
                                 <h5 class="my-1">Most popular posts</h5>
                             </div>
                             <ul>
@@ -133,6 +133,7 @@
 
 <script src="{% static 'js/jquery-3.2.1.js' %}"></script>
 <script src="{% static 'js/popper.js' %}"></script>
+<script src="{% static 'js/tether.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.js' %}"></script>
 <script src="{% static 'js/typeahead.bundle.js' %}"></script>
 <script src="{% static 'js/tagsinput.js' %}"></script>

@@ -1,33 +1,42 @@
 {% load static %}
-    <div class="w-100 pl-4">
-        <a href="#"><h2 class="w-100 mb-0">{{ post.title }}</h2></a>
-    </div>
-    <div class="w-100">
-        <hr class="my-1 "/>
-    </div>
+{# in a row #}
 
-    <div class="col-2">
-        <img src="{% static 'img/avatar.svg' %}" alt="{{ post.created_by.username }}" class="w-100 author_image"/>
-        <div class="text-center"><span class="poster_rank_icon"><i class="fas fa-chess-queen"></i></span>
-            <small>Posts:</small>
-            <small> {{ post.created_by.posts.count }}</small>
-        </div>
-    </div>
-    <div class="col-10">
-        <div class="card border-0">
-            <div class="card-title">
-<span class="text-info">
-        <span class="username">{{ post.created_by.username }}</span>
-        <i class="fas fa-bolt"></i> <span>Last updated: {{ post.created_at }}</span>
-    </span>
+<div class="w-100 pl-2">
+    <a href="#"><h2 class="w-100 mb-0">{{ post.title }}</h2></a>
+</div>
+<div class="w-100">
+    <hr class="my-1 "/>
+</div>
+<div class="row">
 
+    <div class="col-2 text-center app_author_info">
+        <a href="">
+            <div class="app_avatar_image"
+                 style="/*noinspection CssUnknownTarget*/background-image:url('{{post.created_by.profile.thumb_url}}')"
+                 alt="{{ post.created_by.username }}">
             </div>
-            <div class="card-body">
-
-                <div class="post_excerpt row mb-3">
-                    {{ post.message }}
+            <!--<img src="{{ post.created_by.profile.thumb_url }}" class="w-100 app_author_image"/>-->
+            <div class="text-center">
+                <span class="app_username">{{ post.created_by.username }}</span><br/>
+                <span class="app_poster_rank_icon"><i class="fas fa-chess-queen"></i></span>
+                <small>Posts:</small>
+                <small> {{ post.created_by.posts.count }}</small>
+            </div>
+        </a>
+    </div>
+    <div class="col-10 pl-0">
+        <div class="card border-0">
+            <div class="card-body pt-0">
+                <div class="card-title ">
+                    <span class="text-info">
+                        <i class="fas fa-bolt"></i> <span>Last updated: {{ post.created_at }}</span>
+                    </span>
+                </div>
+                <div class="app_post_excerpt row mb-3">
+                    <div class="col-12">{{ post.message }}</div>
                 </div>
 
             </div>
         </div>
     </div>
+</div>
