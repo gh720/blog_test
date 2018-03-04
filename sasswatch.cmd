@@ -1,0 +1,1 @@
+sass --scss --watch ".\static\scss":".\static\css"

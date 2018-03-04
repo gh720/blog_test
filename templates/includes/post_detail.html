@@ -2,29 +2,31 @@
 {# in a row #}
 
 <div class="w-100 pl-2">
-    <a href="#"><h2 class="w-100 mb-0">{{ post.title }}</h2></a>
+    <a href="#"><h2 class="w-100 mb-0 post_title">{{ post.title }}</h2></a>
 </div>
 <div class="w-100">
     <hr class="my-1 "/>
 </div>
 <div class="row">
 
-    <div class="col-2 text-center app_author_info">
-        <a href="">
-            <div class="app_avatar_image"
-                 style="/*noinspection CssUnknownTarget*/background-image:url('{{post.created_by.profile.thumb_url}}')"
-                 alt="{{ post.created_by.username }}">
-            </div>
-            <!--<img src="{{ post.created_by.profile.thumb_url }}" class="w-100 app_author_image"/>-->
-            <div class="text-center">
-                <span class="app_username">{{ post.created_by.username }}</span><br/>
-                <span class="app_poster_rank_icon"><i class="fas fa-chess-queen"></i></span>
-                <small>Posts:</small>
-                <small> {{ post.created_by.posts.count }}</small>
-            </div>
-        </a>
+    <div class="text-center app_author_wrapper">
+        <div class="app_author_info">
+            <a href="">
+                <div class="app_avatar_image"
+                     style="/*noinspection CssUnknownTarget*/background-image:url('{{post.created_by.profile.thumb_url}}')"
+                     alt="{{ post.created_by.username }}">
+                </div>
+                <!--<img src="{{ post.created_by.profile.thumb_url }}" class="w-100 app_author_image"/>-->
+                <div class="text-center">
+                    <span class="app_username">{{ post.created_by.username }}</span><br/>
+                    <span class="app_poster_rank_icon"><i class="fas fa-chess-queen"></i></span>
+                    <small>Posts:</small>
+                    <small> {{ post.created_by.posts.count }}</small>
+                </div>
+            </a>
+        </div>
     </div>
-    <div class="col-10 pl-0">
+    <div class="app_post_column">
         <div class="card border-0">
             <div class="card-body pt-0">
                 <div class="card-title ">

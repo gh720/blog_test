@@ -16,7 +16,7 @@
     {% block stylesheet %}
     {% endblock %}
 </head>
-<body>
+<body class="app_body">
 {% block body %}
     <nav class="navbar app_navbar_main navbar-light navbar-expand-lg  bg-light fixed-top">
         <a class="navbar-brand" href="{% url 'home' %}">
@@ -59,13 +59,13 @@
         </div>
     </nav>
 
-    <div class="container-fluid app_content">
+    <div class="container app_content">
         <div class="row">
-            <div class="col-lg-4 app_sidebar" >
+            <div class="col-lg-3 col-md-4 col-xs-6 app_sidebar" >
 
                 <div class="card">
                     <div class="card-body">
-                        <div class="card-img text-center mb-2">
+                        <div class="card-img text-center mb-2 main_image">
                             <div>
                                 <img src="{% url 'lightning_logo' %}" alt="AI"/>
                                 <span class="text-muted d-block">My blog about Artificial Intelligence</span>
@@ -97,7 +97,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-9 col-md-8 col-xs-6 post_columns">
                 {% block content %}
                 {% endblock %}
             </div>

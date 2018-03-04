@@ -155,10 +155,14 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+.sass-cache/
 
 *.sqlite3
 
+static/css/
 static/fonts/
 static/webfonts/
 uploads/
+temp/
 auxiliary/*.jpg
+log.txt

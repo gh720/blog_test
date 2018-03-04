@@ -1,0 +1,1 @@
+@powershell .\pswatch.ps1

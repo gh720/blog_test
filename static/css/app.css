@@ -1,3 +1,4 @@
+/* [debug]:0 */
 .app_navbar_main {
   background-image: linear-gradient(160deg, #ffffff 0%, #01dfe6 100%);
   box-shadow: 0 0 2px #0b2e13; }
@@ -19,6 +20,12 @@
   max-height: 3em;
   padding: 0; }
 
+.card {
+  background-color: #fff; }
+
+.app_sidebar > .card {
+  background-color: #d5ffd7; }
+
 .app_post_item .post_title {
   border-bottom: 1px #00b3ee solid;
   color: #000000;
@@ -37,16 +44,21 @@
   margin-top: 60px; }
 
 .app_body {
-  background-color: #ddd; }
+  background-color: #fff; }
 
 .app_sidebar {
-  background-color: #ddd; }
+  background-color: #fff; }
+  .app_sidebar .main_image img {
+    max-width: 100%; }
 
 .app_heading_info {
   display: flex;
   align-items: center;
-  background-color: #ddd;
+  background-color: #fff;
   height: 40px; }
+
+.post_columns {
+  padding-left: 0px; }
 
 .app_username {
   display: inline-block;
@@ -67,6 +79,16 @@
   background-size: cover;
   background-position: center center;
   border-radius: 50%; }
+
+.app_author_wrapper {
+  padding-left: 15px; }
+
+.app_author_info {
+  padding: 15px;
+  background-color: #d5ffd7; }
+
+.app_post_column {
+  width: auto; }
 
 .app_poster_rank_icon {
   font-size: larger;
@@ -105,6 +127,25 @@ table.app_profile_table td:nth-of-type(2) {
   max-width: 100%;
   max-height: 100%; }
 
+.app_comment_body {
+  background-color: #f8f8f8; }
+
+.app_comment .app_comment_title {
+  display: flex; }
+  .app_comment .app_comment_title .comment_author, .app_comment .app_comment_title .comment_date {
+    line-height: 30px;
+    vertical-align: middle; }
+  .app_comment .app_comment_title .comment_author {
+    margin-right: auto; }
+    .app_comment .app_comment_title .comment_author a {
+      color: #d20000; }
+
+.app_comment_title {
+  background-color: #d5ffd7; }
+
+.post_title {
+  color: #000; }
+
 /*.form_with_tags .form-group {*/
 /*width: 100%;*/
 /*}*/
@@ -118,4 +159,3 @@ table.app_profile_table td:nth-of-type(2) {
 /*width: 100%;*/
 /*}*/
 
-/*# sourceMappingURL=app.css.map */

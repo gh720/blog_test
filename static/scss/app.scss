@@ -1,17 +1,24 @@
-$primary_bg_color: #ddd;
-$debug: false;
-//$debug: true;
+@charset "utf-8";
 
+/* [debug]:0 */
+
+$primary_bg_color: #fff;
+$non_content_bg_color: #d5ffd7;
+$sidebar_color: $non_content_bg_color;
+$content_color: #fff;
+$comment_bg_color: #f8f8f8;
+$author_info_bg_color: $non_content_bg_color;
+$post_comment_bg_color:$non_content_bg_color;
+$post_title_color: #000;
+$author_link_color: #d20000;
+
+$debug: false;
 @mixin debug {
   @if $debug {
     & {
       outline: 1px #ff0000 dashed !important;
     }
   }
-}
-
-[class^="app_"] {
-  @include debug
 }
 
 .app_navbar_main {
@@ -42,6 +49,15 @@ $debug: false;
   padding: 0;
 }
 
+.card {
+  background-color: $content_color;
+}
+
+.app_sidebar > .card {
+  background-color: $sidebar_color;
+}
+
+
 .app_post_item .post_title {
   border-bottom: 1px #00b3ee solid;
   color: #000000;
@@ -68,8 +84,13 @@ $debug: false;
 
 .app_sidebar {
   background-color: $primary_bg_color;
+  .main_image img {
+    max-width:100%;
+  }
 
 }
+
+
 
 .app_heading_info {
   display: flex;
@@ -78,6 +99,11 @@ $debug: false;
 
   height: 40px;
 
+}
+
+
+.post_columns {
+  padding-left: 0px;
 }
 
 .app_username {
@@ -95,7 +121,7 @@ $debug: false;
 }
 
 .app_avatar_image {
-   //background-image: url('/static/');
+   //background-image: url(' /static/ ');
     display:inline-block;
     width: 100px;
     height: 100px;
@@ -104,18 +130,29 @@ $debug: false;
     border-radius: 50%;
 }
 
+.app_author_wrapper {
+  padding-left: 15px;
+}
+.app_author_info {
+  padding: 15px;
+
+  background-color: $author_info_bg_color;
+}
+
+.app_post_column {
+  width:auto;
+}
+
 .app_poster_rank_icon {
   font-size: larger;
   color: #dd4444;
 }
 
+
 .app_post_excerpt {
   min-height: 100px;
 }
 
-.app_post_column {
-
-}
 
 /*.heading_info:after {*/
 /*content: ' ';*/
@@ -146,7 +183,6 @@ table.app_profile_table td:nth-of-type(1) {
 }
 
 table.app_profile_table td:nth-of-type(2) {
-  @include debug;
   width: 80%;
 }
 
@@ -154,6 +190,37 @@ table.app_profile_table td:nth-of-type(2) {
   max-width: 100%;
   max-height: 100%;
 }
+
+
+.app_comment_body {
+  background-color: $comment_bg_color;
+  ;
+}
+
+.app_comment {
+  .app_comment_title {
+    display: flex;
+    .comment_author, .comment_date {
+      line-height: 30px;
+      vertical-align: middle;
+    }
+    .comment_author {
+      margin-right: auto;
+      a {
+        color: $author_link_color;
+      }
+    }
+  }
+}
+
+.app_comment_title {
+  background-color: $post_comment_bg_color;
+}
+
+.post_title {
+  color: $post_title_color;
+}
+
 
 /*.form_with_tags .form-group {*/
 /*width: 100%;*/
@@ -170,3 +237,4 @@ table.app_profile_table td:nth-of-type(2) {
 /*.twitter-typeahead, .tt-hint, .tt-input, .tt-menu {*/
 /*width: 100%;*/
 /*}*/
+;
