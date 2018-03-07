@@ -38,6 +38,9 @@
                         <a class="label-pill btn_edit_post"
                            href="{% url 'edit_post' post.pk %}"
                            role="button"><i class="fas fa-pen-square"></i> Edit</a>
+                        <a class="label-pill btn_remove_post"
+                           href="{% url 'remove_post' post.pk %}"
+                           role="button"><i class="fas fa-window-close"></i> Remove</a>
                     </div>
                     {% endif %}
                 </div>
