@@ -2,7 +2,7 @@
 
 /* [debug]:0 */
 
-$primary_bg_color: #fff;
+$primary_bg_color: #f1f1f1;
 $non_content_bg_color: #d5ffd7;
 $sidebar_color: $non_content_bg_color;
 $content_color: #fff;
@@ -10,7 +10,17 @@ $comment_bg_color: #f8f8f8;
 $author_info_bg_color: $non_content_bg_color;
 $post_comment_bg_color:$non_content_bg_color;
 $post_title_color: #000;
+$post_title_bg_color: #f4d59e;
 $author_link_color: #d20000;
+
+
+@mixin grad_rep($from, $to) {
+  background-image: repeating-linear-gradient(160deg, $from, $to 100px, $from 200px )
+}
+
+@mixin steel_rep {
+  @include grad_rep(#ebebeb, #c2c2c2)
+}
 
 $debug: false;
 @mixin debug {
@@ -22,17 +32,19 @@ $debug: false;
 }
 
 .app_navbar_main {
-  background-image: linear-gradient(160deg, #ffffff 0%, rgb(1, 223, 230) 100%);
+  //background-image: linear-gradient(160deg, #ffffff 0%, rgb(1, 223, 230) 100%);
+  @include steel_rep;
   box-shadow: 0 0 2px #0b2e13;
-  //padding: 0;
-  //margin: 0;
-}
-
-.app_navbar_main .navbar-brand {
-  font-family: sans-serif;
-  text-shadow: 1px 1px 0px #777;
-  font-size: 24px;
-  color: #ffcd02 !important;
+  li {
+    font-weight: bold;
+  }
+  .navbar-brand {
+    font-family: sans-serif;
+    text-shadow: 2px 2px 5px #eeeeff;
+    font-size: 24px;
+    font-weight: bolder;
+    //color: #ffcd02;
+  }
 }
 
 .app_navbar_main .nav-item {
@@ -67,7 +79,8 @@ $debug: false;
 }
 
 .app_panel_heading {
-  background-image: linear-gradient(160deg, #ffffff 0%, rgb(1, 223, 230) 100%);
+  //background-image: linear-gradient(160deg, #ffffff 0%, rgb(1, 223, 230) 100%);
+  @include steel_rep;
   text-shadow: 1px 1px 0px #777;
   box-shadow: 1px 1px 0px #0b2e13;
   color: #ffcd02 !important;
@@ -104,6 +117,9 @@ $debug: false;
 
 .post_columns {
   padding-left: 0px;
+  .post_card .card-body{
+    padding-top:3px;
+  }
 }
 
 .app_username {
@@ -200,6 +216,7 @@ table.app_profile_table td:nth-of-type(2) {
 .app_comment {
   .app_comment_title {
     display: flex;
+    align-items: center;
     .comment_author, .comment_date {
       line-height: 30px;
       vertical-align: middle;
@@ -215,10 +232,19 @@ table.app_profile_table td:nth-of-type(2) {
 
 .app_comment_title {
   background-color: $post_comment_bg_color;
+  .comment_control {
+    opacity:0.0;
+  }
 }
 
 .post_title {
-  color: $post_title_color;
+  h2 {
+    vertical-align: middle;
+    line-height: 50px;
+    color: $post_title_color;
+    background-color: $post_title_bg_color;
+    padding-top: 0px;
+  }
 }
 
 

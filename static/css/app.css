@@ -1,13 +1,14 @@
 /* [debug]:0 */
 .app_navbar_main {
-  background-image: linear-gradient(160deg, #ffffff 0%, #01dfe6 100%);
+  background-image: repeating-linear-gradient(160deg, #ebebeb, #c2c2c2 100px, #ebebeb 200px);
   box-shadow: 0 0 2px #0b2e13; }
-
-.app_navbar_main .navbar-brand {
-  font-family: sans-serif;
-  text-shadow: 1px 1px 0px #777;
-  font-size: 24px;
-  color: #ffcd02 !important; }
+  .app_navbar_main li {
+    font-weight: bold; }
+  .app_navbar_main .navbar-brand {
+    font-family: sans-serif;
+    text-shadow: 2px 2px 5px #eeeeff;
+    font-size: 24px;
+    font-weight: bolder; }
 
 .app_navbar_main .nav-item {
   font-size: 20px; }
@@ -34,7 +35,7 @@
   text-align: left; }
 
 .app_panel_heading {
-  background-image: linear-gradient(160deg, #ffffff 0%, #01dfe6 100%);
+  background-image: repeating-linear-gradient(160deg, #ebebeb, #c2c2c2 100px, #ebebeb 200px);
   text-shadow: 1px 1px 0px #777;
   box-shadow: 1px 1px 0px #0b2e13;
   color: #ffcd02 !important;
@@ -44,21 +45,23 @@
   margin-top: 60px; }
 
 .app_body {
-  background-color: #fff; }
+  background-color: #f1f1f1; }
 
 .app_sidebar {
-  background-color: #fff; }
+  background-color: #f1f1f1; }
   .app_sidebar .main_image img {
     max-width: 100%; }
 
 .app_heading_info {
   display: flex;
   align-items: center;
-  background-color: #fff;
+  background-color: #f1f1f1;
   height: 40px; }
 
 .post_columns {
   padding-left: 0px; }
+  .post_columns .post_card .card-body {
+    padding-top: 3px; }
 
 .app_username {
   display: inline-block;
@@ -131,7 +134,8 @@ table.app_profile_table td:nth-of-type(2) {
   background-color: #f8f8f8; }
 
 .app_comment .app_comment_title {
-  display: flex; }
+  display: flex;
+  align-items: center; }
   .app_comment .app_comment_title .comment_author, .app_comment .app_comment_title .comment_date {
     line-height: 30px;
     vertical-align: middle; }
@@ -142,9 +146,15 @@ table.app_profile_table td:nth-of-type(2) {
 
 .app_comment_title {
   background-color: #d5ffd7; }
+  .app_comment_title .comment_control {
+    opacity: 0.0; }
 
-.post_title {
-  color: #000; }
+.post_title h2 {
+  vertical-align: middle;
+  line-height: 50px;
+  color: #000;
+  background-color: #f4d59e;
+  padding-top: 0px; }
 
 /*.form_with_tags .form-group {*/
 /*width: 100%;*/

@@ -20,7 +20,7 @@
 {% block body %}
     <nav class="navbar app_navbar_main navbar-light navbar-expand-lg  bg-light fixed-top">
         <a class="navbar-brand" href="{% url 'home' %}">
-            My Blog
+            <span class="blog_title">My Blog</span>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu"
                 aria-controls="mainMenu" aria-expanded="false" aria-label="toggle navigation">
@@ -133,7 +133,6 @@
 
 <script src="{% static 'js/jquery-3.2.1.js' %}"></script>
 <script src="{% static 'js/popper.js' %}"></script>
-<script src="{% static 'js/tether.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.js' %}"></script>
 <script src="{% static 'js/typeahead.bundle.js' %}"></script>
 <script src="{% static 'js/tagsinput.js' %}"></script>
