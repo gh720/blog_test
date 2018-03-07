@@ -12,6 +12,7 @@ $post_comment_bg_color:$non_content_bg_color;
 $post_title_color: #000;
 $post_title_bg_color: #f4d59e;
 $author_link_color: #d20000;
+$dropdown_color : #ddd;
 
 
 @mixin grad_rep($from, $to) {
@@ -45,13 +46,18 @@ $debug: false;
     font-weight: bolder;
     //color: #ffcd02;
   }
+  .dropdown-menu {
+    @include steel_rep;
+  }
 }
 
 .app_navbar_main .nav-item {
   font-size: 20px;
 }
 
-.app_navbar_main a {
+
+
+.app_navbar_main .main_nav_link {
   padding: 0;
 }
 
@@ -148,16 +154,32 @@ $debug: false;
 
 .app_author_wrapper {
   padding-left: 15px;
-}
-.app_author_info {
-  padding: 15px;
+  flex: 0 0;
+  .app_author_info {
+    padding: 15px;
 
-  background-color: $author_info_bg_color;
+    background-color: $author_info_bg_color;
+  }
 }
+
 
 .app_post_column {
-  width:auto;
+  flex: 1 0;
+  .post_details {
+    .card-title {
+      display:flex;
+      //width:100%;
+      .ctl_edit_post {
+        margin-left: auto;
+        .btn_edit_post {
+          padding: 3px;
+          font-weight: bold;
+        }
+      }
+    }
+  }
 }
+
 
 .app_poster_rank_icon {
   font-size: larger;

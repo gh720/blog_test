@@ -13,13 +13,7 @@ Post details
             </div>
         </div>
     </div>
-    {% if post.created_by == user %}
-    <div class="row">
-        <div class="col-12 mt-3">
-            <a class="btn btn-primary" href="{% url 'edit_post' post.pk %}" role="button">Edit</a>
-        </div>
-    </div>
-    {% endif %}
+
 </div>
 <div>
     <div class="text-right"><strong class="px-2 mt-2 text-muted">{{ post.post_comments.count }} Comments:</strong></div>

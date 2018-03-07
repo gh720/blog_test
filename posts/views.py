@@ -235,7 +235,9 @@ class PostDetailsView(base_view_c, DetailView):
             comment.created_by = request.user
             comment.save()
             cform = CommentForm()
-        return render(request, 'post_details.html', {'post': post, 'comment_form': cform})
+            return redirect(reverse('post_details', kwargs={'post_pk': kwargs['post_pk']}));
+        else:
+            return render(request, 'post_details.html', {'post': post, 'comment_form': cform})
 
     def get(self, request, *args, **kwargs):
         post = get_object_or_404(Post, pk=kwargs['post_pk'])

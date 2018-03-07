@@ -27,12 +27,19 @@
         </div>
     </div>
     <div class="app_post_column">
-        <div class="card border-0">
+        <div class="card border-0 post_details">
             <div class="card-body pt-0">
                 <div class="card-title ">
                     <span class="text-info">
                         <i class="fas fa-bolt"></i> <span>Last updated: {{ post.created_at }}</span>
                     </span>
+                    {% if post.created_by == user %}
+                    <div class="ctl_edit_post">
+                        <a class="label-pill btn_edit_post"
+                           href="{% url 'edit_post' post.pk %}"
+                           role="button"><i class="fas fa-pen-square"></i> Edit</a>
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="app_post_excerpt row mb-3">
                     <div class="col-12">{{ post.message }}</div>

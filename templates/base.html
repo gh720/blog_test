@@ -19,18 +19,18 @@
 <body class="app_body">
 {% block body %}
     <nav class="navbar app_navbar_main navbar-light navbar-expand-lg  bg-light fixed-top">
-        <a class="navbar-brand" href="{% url 'home' %}">
+        <a class="navbar-brand main_nav_link" href="{% url 'home' %}">
             <span class="blog_title">My Blog</span>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu"
                 aria-controls="mainMenu" aria-expanded="false" aria-label="toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="mainMenu">
+        <div class=" navbar-collapse" id="mainMenu">
             {% if user.is_authenticated %}
                 <ul class="navbar-nav mr-auto ">
-                    <li class="nav-item" active> <a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                    <li class="nav-item"> <a class="nav-link"  href="{% url 'home' %}">About</a></li>
+                    <li class="nav-item" active> <a class="nav-link main_nav_link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"> <a class="nav-link main_nav_link"  href="{% url 'home' %}">About</a></li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">

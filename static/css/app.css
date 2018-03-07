@@ -9,11 +9,13 @@
     text-shadow: 2px 2px 5px #eeeeff;
     font-size: 24px;
     font-weight: bolder; }
+  .app_navbar_main .dropdown-menu {
+    background-image: repeating-linear-gradient(160deg, #ebebeb, #c2c2c2 100px, #ebebeb 200px); }
 
 .app_navbar_main .nav-item {
   font-size: 20px; }
 
-.app_navbar_main a {
+.app_navbar_main .main_nav_link {
   padding: 0; }
 
 .app_navbar_main img {
@@ -84,14 +86,21 @@
   border-radius: 50%; }
 
 .app_author_wrapper {
-  padding-left: 15px; }
-
-.app_author_info {
-  padding: 15px;
-  background-color: #d5ffd7; }
+  padding-left: 15px;
+  flex: 0 0; }
+  .app_author_wrapper .app_author_info {
+    padding: 15px;
+    background-color: #d5ffd7; }
 
 .app_post_column {
-  width: auto; }
+  flex: 1 0; }
+  .app_post_column .post_details .card-title {
+    display: flex; }
+    .app_post_column .post_details .card-title .ctl_edit_post {
+      margin-left: auto; }
+      .app_post_column .post_details .card-title .ctl_edit_post .btn_edit_post {
+        padding: 3px;
+        font-weight: bold; }
 
 .app_poster_rank_icon {
   font-size: larger;
