@@ -99,7 +99,7 @@ class post_create_view_c(base_view_c, CreateView):
         return ctx
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        # self.object = self.get_object()
         form = self.get_form(self.form_class)
         # form = self.form_class(request.POST)
         if form.is_valid():

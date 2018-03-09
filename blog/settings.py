@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import logging
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -26,7 +26,6 @@ SECRET_KEY = 'muls%mkiz!yozum^z)2gvk3k4fh66&m6^skhmss05a%u-_@o&t'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -55,7 +54,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'blog.urls'
 
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -76,17 +74,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'blog.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
+    'oracle': {
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': 'localhost/xe',
+        'USER': 'django',
+        'PASSWORD': '123'
+    },
+    'default_': {
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': 'localhost/xe',
+        'USER': 'django',
+        'PASSWORD': '123'
+    },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
+DATABASE_ROUTERS = {
+    # 'posts.db_router.main_db_router',
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -106,7 +118,6 @@ AUTH_PASSWORD_VALIDATORS = [
     # },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -120,7 +131,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
@@ -131,13 +141,71 @@ STATICFILES_DIRS = [
 
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
-LOGIN_URL='login'
+LOGIN_URL = 'login'
 
 MEDIA_ROOT = "E:/work/devel/web/frameworks/django/blog/uploads"
 MEDIA_URL = '/uploads/'
 
 AUXILIARY_RESOURCES = "E:/work/devel/web/frameworks/django/blog/aux_resources"
 
-PROFILE_IMAGE_SIZE=(100,100)
+PROFILE_IMAGE_SIZE = (100, 100)
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+import django.db.backends.oracle
+import django.db.backends.base.base
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    # 'filters': {
+    #     'require_debug_false': {
+    #         '()': 'django.utils.log.RequireDebugFalse'
+    #     }
+    # },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './logs/debug.log',
+            'formatter': 'default',
+            #            'filename': 'E:/work/devel/web/frameworks/django/blog/logs/debug.log',
+        },
+    },
+    'loggers': {
+        # 'django.request': {
+        #             'handlers': ['mail_admins'],
+        #             'level': 'ERROR',
+        #             'propagate': True,
+        #         },'django.db.backends.sqlite3': {
+        #             'level': 'DEBUG',
+        #             'handlers': ['console'],
+        #         },
+        'django.db.backends': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
+    },
+    'formatters': {
+        'default': {
+            'format': '%(asctime)s.%(msecs)03d %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+        'verbose': {
+            'format': '%(levelname)s %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+        'brief': {
+            'format': '%(levelname)s %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        }
+    }
+}
+
+l = logging.getLogger('django.db.backends')
+l.setLevel(logging.DEBUG)
+l.addHandler(logging.StreamHandler())
