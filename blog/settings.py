@@ -84,17 +84,13 @@ DATABASES = {
         'USER': 'django',
         'PASSWORD': '123'
     },
-    'default_': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'localhost/xe',
-        'USER': 'django',
-        'PASSWORD': '123'
-    },
-    'default': {
+    'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    },
 }
+
+DATABASES['default']=DATABASES['sqlite']
 
 DATABASE_ROUTERS = {
     # 'posts.db_router.main_db_router',

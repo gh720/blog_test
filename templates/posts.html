@@ -2,19 +2,34 @@
 {% load static %}
 {% block content %}
 
+<div style="height:150px; margin-top:50px;border:solid 1px;font-size:36px;font-weight: bolder; ">
+    <span style="display:inline-block;outline:solid 1px; vertical-align: middle;">Posts</span>
+    <span style="display:inline-block;outline:solid 1px;vertical-align: middle; height:100px;"> Rel </span>
+    <span style="display:inline-block;outline:solid 1px;vertical-align: middle; height:50px;"> Rel2 </span>
+    <span style="display:inline-block;vertical-align: top; height:1px;background-color:red;"> &nbsp; </span>
+    <span style="display:inline-block;vertical-align: middle; height:1px;background-color:red;"> &nbsp; </span>
+    <span style="display:inline-block;vertical-align: bottom; height:1px;background-color:red;"> &nbsp; </span>
+    <!--<span style="display:inline-block;vertical-align: baseline; height:1px;background-color:red;"> &nbsp; </span>-->
+    <!--<span style="display:inline-block;vertical-align: baseline; height:5px;background-color:red;"> &nbsp; </span>-->
+    <!--<span style="display:inline-block;vertical-align: baseline; height:10px;background-color:red;"> &nbsp; </span>-->
+    <!--<span style="display:inline-block;vertical-align: baseline; height:auto;background-color:red;"> &nbsp; </span>-->
+    <span style="display:inline-block;vertical-align: baseline; height:auto;background-color:red;"> xxx_ </span>
+    <!--<span style="display:inline-block;vertical-align: baseline; height:auto;background-color:red;"> Aa </span>-->
+    <!--<span style="display:inline-block;vertical-align: baseline; height:60px;background-color:red;"> Aa </span>-->
+
+</div>
+
 <div class="card">
     <div class="card-body">
         <div class="app_panel_heading mb-2">
-            <a class="label-pill btn_edit_post"
-                           href="{% url 'new_post' %}"
-                           role="button"><i class="fas fa-plu"></i> Edit</a>
+            <div>
+                <span class="just_left">Posts</span>
+            </div>
+            <a class="label-pill btn_new_post just_right"
+               href="{% url 'new_post' %}"
+               role="button"><i class="fas fa-plus"></i> Add</a>
 
-            <h5 class="float-left my-1">Posts</h5>
-            <a href="{% url 'new_post' %}" role="button" class="float-right btn-primary btn-sm mr-2">
-                <i class="fas fa-plus"></i>
-                Add
-            </a>
-            <div class="clearfix"></div>
+            <!--<div class="clearfix"></div>-->
         </div>
         {% for post in posts %}
         <div id="{{ post.pk }}" class="card mb-2 border-dark">

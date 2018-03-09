@@ -30,6 +30,7 @@ class Post(models.Model):
     comment_count = models.PositiveIntegerField(default=0)
 
     def get_absolute_url(self):
+
         return reverse('post_details', args=[self.pk])
 
 class Comment(models.Model):

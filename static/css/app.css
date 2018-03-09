@@ -38,10 +38,22 @@
 
 .app_panel_heading {
   background-image: repeating-linear-gradient(160deg, #ebebeb, #c2c2c2 100px, #ebebeb 200px);
-  text-shadow: 1px 1px 0px #777;
   box-shadow: 1px 1px 0px #0b2e13;
   color: #ffcd02 !important;
-  padding: 5px 0 5px 10px; }
+  padding: 5px 10px 5px 10px;
+  font-size: 1.5em;
+  font-weight: bold;
+  display: block;
+  width: 100%; }
+  .app_panel_heading div {
+    height: 50px;
+    vertical-align: middle; }
+  .app_panel_heading .just_left {
+    text-shadow: 1px 1px 0px #777;
+    margin-right: auto;
+    flex: 0 0; }
+  .app_panel_heading .just_right {
+    flex: 0 0 auto; }
 
 .app_content {
   margin-top: 60px; }
@@ -99,6 +111,9 @@
     .app_post_column .post_details .card-title .ctl_edit_post {
       margin-left: auto; }
       .app_post_column .post_details .card-title .ctl_edit_post .btn_edit_post {
+        padding: 3px;
+        font-weight: bold; }
+      .app_post_column .post_details .card-title .ctl_edit_post .btn_new_post {
         padding: 3px;
         font-weight: bold; }
 
