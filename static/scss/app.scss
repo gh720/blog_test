@@ -13,6 +13,7 @@ $post_title_color: #000;
 $post_title_bg_color: #f4d59e;
 $author_link_color: #d20000;
 $dropdown_color: #ddd;
+$inactive_color: #ebebeb;
 
 @mixin grad_rep($from, $to) {
   background-image: repeating-linear-gradient(160deg, $from, $to 100px, $from 200px)
@@ -83,37 +84,48 @@ $debug: false;
 .app_panel_heading {
   //background-image: linear-gradient(160deg, #ffffff 0%, rgb(1, 223, 230) 100%);
   @include steel_rep;
-
   box-shadow: 1px 1px 0px #0b2e13;
   color: #ffcd02 !important;
   padding: 5px 10px 5px 10px;
   font-size: 1.5em;
   font-weight: bold;
 
-  div {
-    height:50px;
-    vertical-align: middle;
-  }
-  //display: table;
-  //width: 100%;
-  //.just_left {
-  //  display: table-cell;
-  //  width: auto;
-  //}
-  //.just_right {
-  //  display: table-cell;
-  //  width: auto;
-  //}
+  height: 1.5em;
 
-  display: block;
-  width:100%;
+  display: flex;
+  width: 100%;
+  align-items: center;
   .just_left {
+    margin-top:-2px;
     text-shadow: 1px 1px 0px #777;
-    margin-right:auto;
-    flex: 0 0;
+    //line-height: 40px;
+    //display:inline-flex;
+    //align-items:center;
+    //min-height:100px;
+    margin-right: auto;
+    flex: 0 0 auto;
+    //justify-self: left;
+
   }
   .just_right {
     flex: 0 0 auto;
+    justify-self: right;
+  }
+}
+
+.tag_container {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  //background-color: $inactive_color;
+  border-color: black;
+  border-width: 1px;
+  border-left: 1px;
+  border-right: 1px;
+  min-height:2em;
+  align-items: center;
+  span {
+    margin: 2px;
   }
 }
 
@@ -130,7 +142,6 @@ $debug: false;
   .main_image img {
     max-width: 100%;
   }
-
 }
 
 .app_heading_info {
@@ -145,7 +156,7 @@ $debug: false;
 .post_columns {
   padding-left: 0px;
   .post_card .card-body {
-    padding-top: 3px;
+    //padding-top: 3px;
   }
 }
 
@@ -285,6 +296,14 @@ table.app_profile_table td:nth-of-type(2) {
     color: $post_title_color;
     background-color: $post_title_bg_color;
     padding-top: 0px;
+  }
+}
+
+
+.form_with_tags {
+  label {
+    font-weight: bold;
+    font-size: 1.2em;
   }
 }
 

@@ -1,11 +1,14 @@
 import datetime
 import json
 
+import logging
+
 import time
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeDoneView, PasswordResetView, \
     PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
@@ -26,8 +29,9 @@ from blog import settings
 from posts.forms import PostForm, CommentForm
 from posts.models import Post, Comment, Tag
 
-import re
-
+logger = logging.getLogger('blog')
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
 
 def _get_form(request, cls, prefix):
     data = request.POST if prefix + "_submit" in request.POST else None
@@ -54,15 +58,42 @@ def remove_post(request, post_pk):
     return redirect(reverse('home'))
 
 
-class base_view_c:
-    def get_context_data(self, *, object_list=None, **kwargs):
-        ctx = super().get_context_data(**kwargs)
+class base_view_c():
+
+    def add_common_context(self, ctx):
         last3 = Post.objects.all().order_by('-created_at')[:3]
         popular3 = Post.objects.all().order_by('-comment_count')[:3]
         ctx['latest_posts'] = last3
         ctx['popular_posts'] = popular3
+        ctx['tags'] = Tag.objects.all()
+        try:
+            obj = super().get_object()
+            ctx['can_edit'] = self.can_edit(obj)
+        except AttributeError:
+            pass
         return ctx
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        return self.add_common_context(ctx)
+
+    def get_context(self, request, form):
+        ctx = super().get_context(request, form)
+        return self.add_common_context(ctx)
+
+
+    def can_edit(self,obj):
+        if not obj:
+            return False
+        if not (self.request.user and self.request.user.is_authenticated):
+            return False
+        if obj.created_by==self.request.user:
+            return True
+        if self.request.user.is_superuser:
+            return True
+        if hasattr(self,'has_permission') and self.has_permission():
+            return True
+        return False
 
 # @login_required
 # def new_post(request):
@@ -104,8 +135,8 @@ class post_create_view_c(base_view_c, CreateView):
         # form = self.form_class(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.updated_by = self.request.user
-            post.updated_at = timezone.now()
+            post.created_by = self.request.user
+            post.created_at = timezone.now()
             post.save()
             tags_json = self.request.POST.get('tags')
             if tags_json:
@@ -135,8 +166,6 @@ class post_create_view_c(base_view_c, CreateView):
             debug = 1
         return render(request, self.template_name, {'form': form})
 
-
-
     # def post(self, request, *args, **kwargs):
     #     form = self.form_class(request.POST)
     #     if form.is_valid():
@@ -156,7 +185,7 @@ class post_create_view_c(base_view_c, CreateView):
     #     return redirect('home')
 
 
-class PostEditView(base_view_c, UpdateView):
+class post_edit_view_c(base_view_c, UpdateView):
     model = Post
     form_class = PostForm
 
@@ -164,6 +193,15 @@ class PostEditView(base_view_c, UpdateView):
     template_name = 'edit_post.html'
     pk_url_kwarg = 'post_pk'
     context_object_name = 'something'
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if self.can_edit(obj):
+            return obj
+        raise Http404
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         post_pk = self.object.pk
@@ -211,13 +249,15 @@ class PostEditView(base_view_c, UpdateView):
             debug = 1
         return render(request, self.template_name, {'form': form})
 
-class PostListView(base_view_c, ListView):
+
+class post_list_view_c(base_view_c, ListView):
     model = Post
     context_object_name = 'posts'
     template_name = 'posts.html'
 
 
-class PostDetailsView(base_view_c, DetailView):
+
+class post_details_view_c(base_view_c, DetailView):
     model = Post
     context_object_name = 'post'
     template_name = 'post_details.html'
@@ -243,7 +283,7 @@ class PostDetailsView(base_view_c, DetailView):
         post = get_object_or_404(Post, pk=kwargs['post_pk'])
         post.view_count += 1
         post.save()
-        return super(PostDetailsView, self).get(request, args, kwargs)
+        return super(post_details_view_c, self).get(request, args, kwargs)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -258,8 +298,10 @@ class login_view_c(base_view_c, LoginView):
 class password_change_view_c(base_view_c, PasswordChangeView):
     pass
 
+
 class password_change_view_done_c(base_view_c, PasswordChangeDoneView):
     pass
+
 
 class password_reset_view_c(base_view_c, PasswordResetView):
     email_template_name = 'pass_reset_email.html'
@@ -276,31 +318,52 @@ class password_reset_done_view_c(base_view_c, PasswordResetDoneView):
     def get_success_url(self):
         return reverse('pass_reset_confirm')
 
+
 class password_reset_confirm_view_c(base_view_c, PasswordResetConfirmView):
     def get_success_url(self):
         return reverse('pass_reset_complete')
+
 
 class password_reset_complete_view_c(base_view_c, PasswordResetCompleteView):
     pass
 
 
-class post_edit_form_preview_c(FormPreview):
+class post_edit_form_preview_c(base_view_c, FormPreview):
     form_class = PostForm
     form_template = 'edit_post.html'
     preview_template = 'edit_post_preview.html'
 
     pk_url_kwarg = 'post_pk'
 
+    def parse_params(self, request, *args, **kwargs):
+        super().parse_params(request, *args, **kwargs)
+        if 'post_pk' in kwargs:
+            self.state['post_pk'] = kwargs['post_pk']
+
+    def get_initial(self, request):
+        initial = super().get_initial(request)
+        initial['pk'] = self.state['post_pk']
+        return initial
+
+    def preview_get(self, request):
+        instance = None
+        if 'post_pk' in request.resolver_match.kwargs:
+            instance = Post.objects.get(pk=request.resolver_match.kwargs['post_pk'])
+
+        f = self.form(auto_id=self.get_auto_id(),
+                      initial=self.get_initial(request), instance=instance)
+        return render(request, self.form_template, self.get_context(request, f))
+
     def get_context(self, request, form):
-        ctx=super().get_context(request, form)
+        ctx = super().get_context(request, form)
         d = datetime.datetime.now()
         formatter = df.DateFormat(d)
         format = settings.__dict__.get('DATETIME_FORMAT', defaults.DATETIME_FORMAT)
 
-        ctx['post_preview']={ 'created_by': request.user, 'created_at': formatter.format(format)}
+        ctx['post_preview'] = {'created_by': request.user, 'created_at': formatter.format(format)}
         return ctx
 
-    def done(self,request,cleaned_data):
+    def done(self, request, cleaned_data):
         self.object = self.get_object()
         form = self.get_form(self.form_class)
         # form = self.form_class(request.POST)
@@ -335,3 +398,29 @@ class post_edit_form_preview_c(FormPreview):
             debug = 1
         return render(request, self.template_name, {'form': form})
 
+
+class tags_view_c(base_view_c, ListView):
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'posts.html'
+
+    pk_kw_arg = 'tag_pk'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        ctx = super().get_context_data(object_list=object_list, **kwargs)
+        tag = self.request.resolver_match.kwargs.get(self.pk_kw_arg)
+        if tag:
+            try:
+                ctx['heading'] = 'Posts for "%s"' % (Tag.objects.get(id=int(tag)))
+            except Exception as e:
+                logger.error(str(e))
+        return ctx
+
+    def get_queryset(self):
+        tag = self.request.resolver_match.kwargs.get(self.pk_kw_arg)
+        result = None
+        if tag:
+            result = Post.objects.filter(tags=tag)
+        else:
+            result = Post.objects.all()
+        return result

@@ -1,19 +1,21 @@
 {% load static %}
+{% load form_tags %}
 {# in a row #}
 
 <div class="post_title">
-    <a href="#"><h2 class="mb-0 text-center">{{ post.title }}</h2></a>
+    <a href="{% url 'post_details' post.pk %}"><h2 class="mb-0 text-center">{{ post.title }}</h2></a>
 </div>
 <div class="w-100">
     <hr class="my-1 "/>
 </div>
 <div class="row">
-
+    {% static 'img/avatar.svg' as default_profile_thumbnail %}
     <div class="text-center app_author_wrapper">
         <div class="app_author_info">
             <a href="">
                 <div class="app_avatar_image"
-                     style="/*noinspection CssUnknownTarget*/background-image:url('{{post.created_by.profile.thumb_url}}')"
+                     style="/*noinspection CssUnknownTarget*/
+                        background-image:url('{% firstof post.created_by.profile.thumb_url default_profile_thumbnail %}')"
                      alt="{{ post.created_by.username }}">
                 </div>
                 <!--<img src="{{ post.created_by.profile.thumb_url }}" class="w-100 app_author_image"/>-->
@@ -33,7 +35,8 @@
                     <span class="text-info">
                         <i class="fas fa-bolt"></i> <span>Last updated: {{ post.created_at }}</span>
                     </span>
-                    {% if post.created_by == user %}
+                    {#% if post.created_by == user %#}
+                    {% if can_edit %}
                     <div class="ctl_edit_post">
                         <a class="label-pill btn_edit_post"
                            href="{% url 'edit_post' post.pk %}"
@@ -45,7 +48,12 @@
                     {% endif %}
                 </div>
                 <div class="app_post_excerpt row mb-3">
-                    <div class="col-12">{{ post.message }}</div>
+                    <div class="col-12">{{ post.message | markdown }}</div>
+                </div>
+                <div class="tag_container">
+                    {% for tag in post.tags.all %}
+                    <a href="{% url 'posts_with_the_tag' tag.pk %}"><span class="badge badge-info">{{ tag }}</span></a>
+                    {% endfor %}
                 </div>
 
             </div>

@@ -2,38 +2,36 @@
 {% load static %}
 {% block content %}
 
-<div style="height:150px; margin-top:50px;border:solid 1px;font-size:36px;font-weight: bolder; ">
-    <span style="display:inline-block;outline:solid 1px; vertical-align: middle;">Posts</span>
-    <span style="display:inline-block;outline:solid 1px;vertical-align: middle; height:100px;"> Rel </span>
-    <span style="display:inline-block;outline:solid 1px;vertical-align: middle; height:50px;"> Rel2 </span>
-    <span style="display:inline-block;vertical-align: top; height:1px;background-color:red;"> &nbsp; </span>
-    <span style="display:inline-block;vertical-align: middle; height:1px;background-color:red;"> &nbsp; </span>
-    <span style="display:inline-block;vertical-align: bottom; height:1px;background-color:red;"> &nbsp; </span>
-    <!--<span style="display:inline-block;vertical-align: baseline; height:1px;background-color:red;"> &nbsp; </span>-->
-    <!--<span style="display:inline-block;vertical-align: baseline; height:5px;background-color:red;"> &nbsp; </span>-->
-    <!--<span style="display:inline-block;vertical-align: baseline; height:10px;background-color:red;"> &nbsp; </span>-->
-    <!--<span style="display:inline-block;vertical-align: baseline; height:auto;background-color:red;"> &nbsp; </span>-->
-    <span style="display:inline-block;vertical-align: baseline; height:auto;background-color:red;"> xxx_ </span>
-    <!--<span style="display:inline-block;vertical-align: baseline; height:auto;background-color:red;"> Aa </span>-->
-    <!--<span style="display:inline-block;vertical-align: baseline; height:60px;background-color:red;"> Aa </span>-->
+<!--<div style="height:150px; margin-top:50px;border:solid 1px;font-size:36px;font-weight: bolder; ">-->
+    <!--<span style="display:inline-block;outline:solid 1px; vertical-align: middle;">Posts</span>-->
+    <!--<span style="display:inline-block;outline:solid 1px;vertical-align: middle; height:100px;"> Rel </span>-->
+    <!--<span style="display:inline-block;outline:solid 1px;vertical-align: middle; height:50px;"> Rel2 </span>-->
+    <!--<span style="display:inline-block;vertical-align: top; height:1px;background-color:red;"> &nbsp; </span>-->
+    <!--<span style="display:inline-block;vertical-align: middle; height:1px;background-color:red;"> &nbsp; </span>-->
+    <!--<span style="display:inline-block;vertical-align: bottom; height:1px;background-color:red;"> &nbsp; </span>-->
+    <!--&lt;!&ndash;<span style="display:inline-block;vertical-align: baseline; height:1px;background-color:red;"> &nbsp; </span>&ndash;&gt;-->
+    <!--&lt;!&ndash;<span style="display:inline-block;vertical-align: baseline; height:5px;background-color:red;"> &nbsp; </span>&ndash;&gt;-->
+    <!--&lt;!&ndash;<span style="display:inline-block;vertical-align: baseline; height:10px;background-color:red;"> &nbsp; </span>&ndash;&gt;-->
+    <!--&lt;!&ndash;<span style="display:inline-block;vertical-align: baseline; height:auto;background-color:red;"> &nbsp; </span>&ndash;&gt;-->
+    <!--<span style="display:inline-block;vertical-align: baseline; height:auto;background-color:red;"> xxx_ </span>-->
+    <!--&lt;!&ndash;<span style="display:inline-block;vertical-align: baseline; height:auto;background-color:red;"> Aa </span>&ndash;&gt;-->
+    <!--&lt;!&ndash;<span style="display:inline-block;vertical-align: baseline; height:60px;background-color:red;"> Aa </span>&ndash;&gt;-->
 
-</div>
+<!--</div>-->
 
 <div class="card">
     <div class="card-body">
         <div class="app_panel_heading mb-2">
-            <div>
-                <span class="just_left">Posts</span>
-            </div>
+            <span class="just_left">{% firstof heading 'Posts' %}</span>
             <a class="label-pill btn_new_post just_right"
                href="{% url 'new_post' %}"
-               role="button"><i class="fas fa-plus"></i> Add</a>
+               role="button"><i class="fas fa-plus-square"></i> Add</a>
 
             <!--<div class="clearfix"></div>-->
         </div>
-        {% for post in posts %}
-        <div id="{{ post.pk }}" class="card mb-2 border-dark">
-            <div class="card-body p-3">
+        {% for post in posts reversed %}
+        <div id="{{ post.pk }}" class="card mb-2 border-0">
+            <div class="card-body p-0">
                 <!--<div class="py-2 px-3">{{ post.title }}</div>-->
 
                 <div class="row">

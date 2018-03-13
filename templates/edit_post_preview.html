@@ -32,3 +32,9 @@
     </div>
 </div>
 {% endblock %}
+
+
+{% block javascript %}
+    <script> var simplemde = new SimpleMDE(); </script>
+    {% include 'includes/tags_js.html' %}
+{% endblock %}

@@ -2,8 +2,27 @@
 {% load static %}
 
 {% block title %}
-    Edit post
+Edit post
 {% endblock %}
+
 {% block content %}
-{% include 'includes/post_form.html' %}
+
+<div class="card">
+    <div class="card-body">
+        <div class="app_panel_heading mb-2">
+            <span class="just_left">Edit post</span>
+        </div>
+        {% include 'includes/post_form.html' %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block mdlg_body %}
+<div>You are going to add new tags: <span id="new_tags"></span> Are you sure?</div>
+{% endblock %}
+
+{% block javascript %}
+    <script> var simplemde = new SimpleMDE(); </script>
+    {% include 'includes/tags_js.html' %}
 {% endblock %}

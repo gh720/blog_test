@@ -43,17 +43,31 @@
   padding: 5px 10px 5px 10px;
   font-size: 1.5em;
   font-weight: bold;
-  display: block;
-  width: 100%; }
-  .app_panel_heading div {
-    height: 50px;
-    vertical-align: middle; }
+  height: 1.5em;
+  display: flex;
+  width: 100%;
+  align-items: center; }
   .app_panel_heading .just_left {
+    margin-top: -2px;
     text-shadow: 1px 1px 0px #777;
     margin-right: auto;
-    flex: 0 0; }
-  .app_panel_heading .just_right {
     flex: 0 0 auto; }
+  .app_panel_heading .just_right {
+    flex: 0 0 auto;
+    justify-self: right; }
+
+.tag_container {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  border-color: black;
+  border-width: 1px;
+  border-left: 1px;
+  border-right: 1px;
+  min-height: 2em;
+  align-items: center; }
+  .tag_container span {
+    margin: 2px; }
 
 .app_content {
   margin-top: 60px; }
@@ -74,8 +88,6 @@
 
 .post_columns {
   padding-left: 0px; }
-  .post_columns .post_card .card-body {
-    padding-top: 3px; }
 
 .app_username {
   display: inline-block;
@@ -179,6 +191,10 @@ table.app_profile_table td:nth-of-type(2) {
   color: #000;
   background-color: #f4d59e;
   padding-top: 0px; }
+
+.form_with_tags label {
+  font-weight: bold;
+  font-size: 1.2em; }
 
 /*.form_with_tags .form-group {*/
 /*width: 100%;*/

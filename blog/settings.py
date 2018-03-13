@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'formtools',
     'widget_tweaks',
     'accounts',
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,7 +52,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
+
+INTERNAL_IPS=['127.0.0.1']
+
+
+DEBUG_TOOLBAR_CONFIG = {
+    'JQUERY_URL' : '/static/js/jquery-3.2.1.js'
+}
+
 
 ROOT_URLCONF = 'blog.urls'
 
@@ -90,7 +101,7 @@ DATABASES = {
     },
 }
 
-DATABASES['default']=DATABASES['sqlite']
+DATABASES['default'] = DATABASES['sqlite']
 
 DATABASE_ROUTERS = {
     # 'posts.db_router.main_db_router',
@@ -167,13 +178,26 @@ LOGGING = {
             'formatter': 'default',
             #            'filename': 'E:/work/devel/web/frameworks/django/blog/logs/debug.log',
         },
+        'django.server': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'django.server',
+        },
     },
     'loggers': {
-        # 'django.request': {
-        #             'handlers': ['mail_admins'],
-        #             'level': 'ERROR',
-        #             'propagate': True,
-        #         },'django.db.backends.sqlite3': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+
+        'django.server': {
+            'handlers': ['django.server'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+
+        # ,'django.db.backends.sqlite3': {
         #             'level': 'DEBUG',
         #             'handlers': ['console'],
         #         },
@@ -198,10 +222,14 @@ LOGGING = {
         'brief': {
             'format': '%(levelname)s %(message)s',
             'datefmt': '%Y-%m-%d %H:%M:%S',
-        }
+        },
+        'django.server': {
+            '()': 'django.utils.log.ServerFormatter',
+            'format': '[%(server_time)s] %(message)s',
+        },
     }
 }
 
-l = logging.getLogger('django.db.backends')
-l.setLevel(logging.DEBUG)
-l.addHandler(logging.StreamHandler())
+# l = logging.getLogger('django.db.backends')
+# l.setLevel(logging.DEBUG)
+# l.addHandler(logging.StreamHandler())

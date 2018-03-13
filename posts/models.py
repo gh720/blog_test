@@ -4,21 +4,30 @@ import os
 
 from PIL import Image
 from django.conf import settings
+from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
 from django.db import models
 from django.urls import reverse
 
 from posts.common import user_uploads_path
+from django.db.models import Q
 
 
 class Tag(models.Model):
     tag = models.CharField(max_length=50)
 
     def __str__(self):
-        return "%s" % (self.tag);
+        return self.tag
+
+class TagAdmin(admin.ModelAdmin):
+    list_display = ["id", "tag"]
 
 class Post(models.Model):
+    '''
+    holds a post, related to :model:`posts.Post` and :model:`auth.User`
+    '''
+
     title = models.CharField(max_length=400)
     message = models.TextField(max_length=4000)
     created_at=models.DateTimeField(auto_now_add=True)
@@ -29,9 +38,29 @@ class Post(models.Model):
     view_count = models.PositiveIntegerField(default=0)
     comment_count = models.PositiveIntegerField(default=0)
 
-    def get_absolute_url(self):
+    def __str__(self):
+        return self.title
 
+
+    def custom_order(self):
+        return
+
+    def get_absolute_url(self):
         return reverse('post_details', args=[self.pk])
+
+    def assigned_tags(self):
+        return ";".join([str(tag) for tag in self.tags.all() ])
+
+    def can_edit(self):
+        
+
+
+class PostAdmin(admin.ModelAdmin):
+    list_display = ["id", "title","message", 'created_at', 'updated_at'
+        , 'created_by', 'updated_by', 'view_count', 'assigned_tags', 'comment_count']
+    show_full_result_count=True
+    view_on_site=True
+
 
 class Comment(models.Model):
     message = models.TextField(max_length=400)
@@ -40,6 +69,9 @@ class Comment(models.Model):
     updated_at=models.DateTimeField(blank=True, null=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comments', on_delete= models.CASCADE)
     updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, related_name='+', on_delete= models.CASCADE)
+
+    def __str__(self):
+        return self.message[:30]
 
 class profile_c(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='profile', on_delete=models.CASCADE)
