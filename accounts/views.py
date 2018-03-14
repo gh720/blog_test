@@ -1,4 +1,6 @@
 from django.contrib.auth import login
+from django.contrib.auth.views import PasswordResetCompleteView, PasswordResetConfirmView, PasswordResetDoneView, \
+    PasswordResetView, PasswordChangeDoneView, PasswordChangeView, LoginView
 from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
@@ -70,5 +72,41 @@ class profile_view_c(base_view_c, DetailView):
         ctx = super().get_context_data(**kwargs)
         return ctx
 
+
+class login_view_c(base_view_c, LoginView):
+    pass
+
+
+class password_change_view_c(base_view_c, PasswordChangeView):
+    pass
+
+
+class password_change_view_done_c(base_view_c, PasswordChangeDoneView):
+    pass
+
+
+class password_reset_view_c(base_view_c, PasswordResetView):
+    email_template_name = 'pass_reset_email.html'
+    subject_template_name = 'pass_reset_subject.txt'
+
+    def get_success_url(self):
+        return reverse('pass_reset_done')
+
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+
+class password_reset_done_view_c(base_view_c, PasswordResetDoneView):
+    def get_success_url(self):
+        return reverse('pass_reset_confirm')
+
+
+class password_reset_confirm_view_c(base_view_c, PasswordResetConfirmView):
+    def get_success_url(self):
+        return reverse('pass_reset_complete')
+
+
+class password_reset_complete_view_c(base_view_c, PasswordResetCompleteView):
+    pass
 
 

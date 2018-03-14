@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rules.apps.AutodiscoverRulesConfig',
     'debug_toolbar',
     'formtools',
     'widget_tweaks',
@@ -53,6 +54,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+]
+
+AUTHENTICATION_BACKENDS = [
+    'rules.permissions.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 INTERNAL_IPS=['127.0.0.1']
@@ -148,7 +154,7 @@ STATICFILES_DIRS = [
 
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
-LOGIN_URL = 'login'
+LOGIN_URL = 'accounts:login'
 
 MEDIA_ROOT = "E:/work/devel/web/frameworks/django/blog/uploads"
 MEDIA_URL = '/uploads/'

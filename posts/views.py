@@ -59,18 +59,17 @@ def remove_post(request, post_pk):
 
 
 class base_view_c():
-
     def add_common_context(self, ctx):
         last3 = Post.objects.all().order_by('-created_at')[:3]
         popular3 = Post.objects.all().order_by('-comment_count')[:3]
         ctx['latest_posts'] = last3
         ctx['popular_posts'] = popular3
         ctx['tags'] = Tag.objects.all()
-        try:
-            obj = super().get_object()
-            ctx['can_edit'] = self.can_edit(obj)
-        except AttributeError:
-            pass
+        # try:
+        #     obj = super().get_object()
+        #     ctx['can_edit'] = self.can_edit(obj)
+        # except AttributeError:
+        #     pass
         return ctx
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -108,7 +107,7 @@ class base_view_c():
 #         form=PostForm()
 #     return render(request, 'new_post.html', { 'form':form })
 
-class post_create_view_c(base_view_c, CreateView):
+class post_create_view_c(base_view_c, PermissionRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
     # fields = ('title', 'message', 'tags')
@@ -185,8 +184,9 @@ class post_create_view_c(base_view_c, CreateView):
     #     return redirect('home')
 
 
-class post_edit_view_c(base_view_c, UpdateView):
+class post_edit_view_c(base_view_c, PermissionRequiredMixin, UpdateView):
     model = Post
+    permission_required = 'posts.view_post'
     form_class = PostForm
 
     # fields=('title','message','tags')
@@ -196,9 +196,10 @@ class post_edit_view_c(base_view_c, UpdateView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
-        if self.can_edit(obj):
-            return obj
-        raise Http404
+        # if self.can_edit(obj):
+        #     return obj
+        return obj
+        # raise Http404
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
@@ -290,46 +291,9 @@ class post_details_view_c(base_view_c, DetailView):
         ctx['comment_form'] = ctx.get('comment_form', CommentForm())
         return ctx
 
-
-class login_view_c(base_view_c, LoginView):
-    pass
-
-
-class password_change_view_c(base_view_c, PasswordChangeView):
-    pass
-
-
-class password_change_view_done_c(base_view_c, PasswordChangeDoneView):
-    pass
-
-
-class password_reset_view_c(base_view_c, PasswordResetView):
-    email_template_name = 'pass_reset_email.html'
-    subject_template_name = 'pass_reset_subject.txt'
-
-    def get_success_url(self):
-        return reverse('pass_reset_done')
-
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
-
-
-class password_reset_done_view_c(base_view_c, PasswordResetDoneView):
-    def get_success_url(self):
-        return reverse('pass_reset_confirm')
-
-
-class password_reset_confirm_view_c(base_view_c, PasswordResetConfirmView):
-    def get_success_url(self):
-        return reverse('pass_reset_complete')
-
-
-class password_reset_complete_view_c(base_view_c, PasswordResetCompleteView):
-    pass
-
-
-class post_edit_form_preview_c(base_view_c, FormPreview):
+class post_edit_form_preview_c(base_view_c, PermissionRequiredMixin, FormPreview):
     form_class = PostForm
+    permission_required = 'posts.change_post'
     form_template = 'edit_post.html'
     preview_template = 'edit_post_preview.html'
 
