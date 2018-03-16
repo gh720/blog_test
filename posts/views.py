@@ -5,7 +5,6 @@ import logging
 
 import time
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeDoneView, PasswordResetView, \
     PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.http import JsonResponse, Http404
@@ -15,10 +14,17 @@ from django.utils import timezone
 from django.utils import dateformat as df
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, UpdateView, DetailView, CreateView
+from rules.contrib.views import (LoginRequiredMixin,
+                                 # PermissionRequiredMixin,
+                                 objectgetter,
+                                 permission_required)
+
+import rules.contrib.views as rviews
 
 # import django.views.generic
 # django.views.generic.
 from django.views.generic.detail import SingleObjectMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 # import django
 from formtools.preview import FormPreview
@@ -29,9 +35,14 @@ from blog import settings
 from posts.forms import PostForm, CommentForm
 from posts.models import Post, Comment, Tag
 
+from blog import urls
+
+
+
 logger = logging.getLogger('blog')
 logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler())
+
 
 def _get_form(request, cls, prefix):
     data = request.POST if prefix + "_submit" in request.POST else None
@@ -80,19 +91,19 @@ class base_view_c():
         ctx = super().get_context(request, form)
         return self.add_common_context(ctx)
 
-
-    def can_edit(self,obj):
+    def can_edit(self, obj):
         if not obj:
             return False
         if not (self.request.user and self.request.user.is_authenticated):
             return False
-        if obj.created_by==self.request.user:
+        if obj.created_by == self.request.user:
             return True
         if self.request.user.is_superuser:
             return True
-        if hasattr(self,'has_permission') and self.has_permission():
+        if hasattr(self, 'has_permission') and self.has_permission():
             return True
         return False
+
 
 # @login_required
 # def new_post(request):
@@ -114,6 +125,7 @@ class post_create_view_c(base_view_c, PermissionRequiredMixin, CreateView):
     initial = dict()
     template_name = 'new_post.html'
     pk_url_kwarg = 'post_pk'
+    permission_required = [ 'post.add', ]
 
     # context_object_name = 'something'
 
@@ -184,10 +196,13 @@ class post_create_view_c(base_view_c, PermissionRequiredMixin, CreateView):
     #     return redirect('home')
 
 
-class post_edit_view_c(base_view_c, PermissionRequiredMixin, UpdateView):
+class post_edit_view_c(base_view_c, rviews.PermissionRequiredMixin, UpdateView):
     model = Post
-    permission_required = 'posts.view_post'
+    permission_required = [ 'post.change', ]
     form_class = PostForm
+
+    def get_permission_object(self):
+        return super().get_permission_object()
 
     # fields=('title','message','tags')
     template_name = 'edit_post.html'
@@ -257,7 +272,6 @@ class post_list_view_c(base_view_c, ListView):
     template_name = 'posts.html'
 
 
-
 class post_details_view_c(base_view_c, DetailView):
     model = Post
     context_object_name = 'post'
@@ -290,6 +304,7 @@ class post_details_view_c(base_view_c, DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx['comment_form'] = ctx.get('comment_form', CommentForm())
         return ctx
+
 
 class post_edit_form_preview_c(base_view_c, PermissionRequiredMixin, FormPreview):
     form_class = PostForm

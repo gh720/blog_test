@@ -94,12 +94,10 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'oracle': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'localhost/xe',
-        'USER': 'django',
-        'PASSWORD': '123'
+DATABASE_CONFIGS =  {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
     'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -107,7 +105,18 @@ DATABASES = {
     },
 }
 
-DATABASES['default'] = DATABASES['sqlite']
+DATABASES = {
+    # 'oracle': {
+    #     'ENGINE': 'django.db.backends.oracle',
+    #     'NAME': 'localhost/xe',
+    #     'USER': 'django',
+    #     'PASSWORD': '123'
+    # },
+}
+
+DATABASES = {
+    'default' : DATABASE_CONFIGS['sqlite']
+}
 
 DATABASE_ROUTERS = {
     # 'posts.db_router.main_db_router',

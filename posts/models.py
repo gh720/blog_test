@@ -25,7 +25,8 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ["id", "tag"]
 
 
-# import django.contrib.auth.backends
+#import django.contrib.auth.backends
+import django.contrib.auth
 # import rules
 
 class Post(models.Model):
