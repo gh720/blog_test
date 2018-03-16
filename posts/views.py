@@ -118,6 +118,77 @@ class base_view_c():
 #         form=PostForm()
 #     return render(request, 'new_post.html', { 'form':form })
 
+
+
+
+class post_list_view_c(base_view_c, ListView):
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'posts.html'
+
+class tags_view_c(base_view_c, ListView):
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'posts.html'
+
+    pk_kw_arg = 'tag_pk'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        ctx = super().get_context_data(object_list=object_list, **kwargs)
+        tag = self.request.resolver_match.kwargs.get(self.pk_kw_arg)
+        if tag:
+            try:
+                ctx['heading'] = 'Posts for "%s"' % (Tag.objects.get(id=int(tag)))
+            except Exception as e:
+                logger.error(str(e))
+        return ctx
+
+    def get_queryset(self):
+        tag = self.request.resolver_match.kwargs.get(self.pk_kw_arg)
+        result = None
+        if tag:
+            result = Post.objects.filter(tags=tag)
+        else:
+            result = Post.objects.all()
+        return result
+
+
+class post_details_view_c(base_view_c, DetailView):
+    model = Post
+    context_object_name = 'post'
+    template_name = 'post_details.html'
+    pk_url_kwarg = 'post_pk'
+
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, pk=kwargs['post_pk'])
+        cform = _get_form(request, CommentForm, 'comment')
+        if cform.is_bound and cform.is_valid():
+            post.comment_count += 1
+            post.save()
+            comment = cform.save(commit=False)
+            comment.post = post
+            comment.created_by = request.user
+            comment.save()
+            cform = CommentForm()
+            return redirect(reverse('post_details', kwargs={'post_pk': kwargs['post_pk']}))
+        else:
+            return render(request, 'post_details.html', {'post': post, 'comment_form': cform})
+
+    def get(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, pk=kwargs['post_pk'])
+        post.view_count += 1
+        post.save()
+        return super(post_details_view_c, self).get(request, args, kwargs)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['comment_form'] = ctx.get('comment_form', CommentForm())
+        return ctx
+
+
+####### edit views
+
 class post_create_view_c(base_view_c, PermissionRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
@@ -196,6 +267,7 @@ class post_create_view_c(base_view_c, PermissionRequiredMixin, CreateView):
     #     return redirect('home')
 
 
+
 class post_edit_view_c(base_view_c, rviews.PermissionRequiredMixin, UpdateView):
     model = Post
     permission_required = [ 'post.change', ]
@@ -266,49 +338,9 @@ class post_edit_view_c(base_view_c, rviews.PermissionRequiredMixin, UpdateView):
         return render(request, self.template_name, {'form': form})
 
 
-class post_list_view_c(base_view_c, ListView):
-    model = Post
-    context_object_name = 'posts'
-    template_name = 'posts.html'
-
-
-class post_details_view_c(base_view_c, DetailView):
-    model = Post
-    context_object_name = 'post'
-    template_name = 'post_details.html'
-    pk_url_kwarg = 'post_pk'
-
-    @method_decorator(login_required)
-    def post(self, request, *args, **kwargs):
-        post = get_object_or_404(Post, pk=kwargs['post_pk'])
-        cform = _get_form(request, CommentForm, 'comment')
-        if cform.is_bound and cform.is_valid():
-            post.comment_count += 1
-            post.save()
-            comment = cform.save(commit=False)
-            comment.post = post
-            comment.created_by = request.user
-            comment.save()
-            cform = CommentForm()
-            return redirect(reverse('post_details', kwargs={'post_pk': kwargs['post_pk']}));
-        else:
-            return render(request, 'post_details.html', {'post': post, 'comment_form': cform})
-
-    def get(self, request, *args, **kwargs):
-        post = get_object_or_404(Post, pk=kwargs['post_pk'])
-        post.view_count += 1
-        post.save()
-        return super(post_details_view_c, self).get(request, args, kwargs)
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['comment_form'] = ctx.get('comment_form', CommentForm())
-        return ctx
-
-
-class post_edit_form_preview_c(base_view_c, PermissionRequiredMixin, FormPreview):
+class post_edit_form_preview_c(base_view_c, SingleObjectMixin, rviews.PermissionRequiredMixin, FormPreview):
     form_class = PostForm
-    permission_required = 'posts.change_post'
+    permission_required = 'post.change'
     form_template = 'edit_post.html'
     preview_template = 'edit_post_preview.html'
 
@@ -324,14 +356,27 @@ class post_edit_form_preview_c(base_view_c, PermissionRequiredMixin, FormPreview
         initial['pk'] = self.state['post_pk']
         return initial
 
+    def get_queryset(self):
+        return Post.objects
+
     def preview_get(self, request):
-        instance = None
-        if 'post_pk' in request.resolver_match.kwargs:
-            instance = Post.objects.get(pk=request.resolver_match.kwargs['post_pk'])
+        self.request = request
+        self.kwargs = request.resolver_match.kwargs
+        self.object = self.get_object()
+        # if 'post_pk' in request.resolver_match.kwargs:
+        #     self.object = Post.objects.get(pk=request.resolver_match.kwargs['post_pk'])
+        if not self.has_permission():
+            return self.handle_no_permission()
 
         f = self.form(auto_id=self.get_auto_id(),
-                      initial=self.get_initial(request), instance=instance)
+                      initial=self.get_initial(request), instance=self.object)
         return render(request, self.form_template, self.get_context(request, f))
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def has_permission(self):
+        return super().has_permission()
 
     def get_context(self, request, form):
         ctx = super().get_context(request, form)
@@ -378,28 +423,5 @@ class post_edit_form_preview_c(base_view_c, PermissionRequiredMixin, FormPreview
         return render(request, self.template_name, {'form': form})
 
 
-class tags_view_c(base_view_c, ListView):
-    model = Post
-    context_object_name = 'posts'
-    template_name = 'posts.html'
 
-    pk_kw_arg = 'tag_pk'
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        ctx = super().get_context_data(object_list=object_list, **kwargs)
-        tag = self.request.resolver_match.kwargs.get(self.pk_kw_arg)
-        if tag:
-            try:
-                ctx['heading'] = 'Posts for "%s"' % (Tag.objects.get(id=int(tag)))
-            except Exception as e:
-                logger.error(str(e))
-        return ctx
-
-    def get_queryset(self):
-        tag = self.request.resolver_match.kwargs.get(self.pk_kw_arg)
-        result = None
-        if tag:
-            result = Post.objects.filter(tags=tag)
-        else:
-            result = Post.objects.all()
-        return result

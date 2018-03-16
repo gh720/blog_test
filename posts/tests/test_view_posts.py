@@ -10,7 +10,6 @@ from posts.models import Post, Tag
 
 from  posts.common import response_decode as dec
 
-
 class post_view_tests_c(TestCase):
     post1=None
     post2=None
@@ -106,12 +105,3 @@ class post_view_tests_c(TestCase):
         form = response.context.get('form')
         self.assertEquals(response.status_code, 200)
         self.assertTrue(form.errors)
-
-
-
-
-###### new post
-
-
-    # def test_edit_own_post_200(self):
-    #     url=reverse('edit_post', kwargs=dict(post_pk=)
