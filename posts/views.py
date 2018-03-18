@@ -4,6 +4,8 @@ import json
 import logging
 
 import time
+
+from celery.result import AsyncResult
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeDoneView, PasswordResetView, \
     PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
@@ -23,7 +25,7 @@ from formtools.preview import FormPreview
 
 from django.conf import settings as defaults
 
-from blog import settings
+from blog import settings, celery, tasks
 from posts.forms import PostForm, CommentForm
 from posts.models import Post, Comment, Tag
 
@@ -432,13 +434,25 @@ class comment_refresh_json_c(DetailView):
     pk_url_kwarg = 'post_pk'
 
     def render_to_response(self, context, **response_kwargs):
+        result=None
         if 0 and not self.request.is_ajax():
             raise Http404
-        count = Comment.objects.count()
-        # obj = serializers.serialize('json', )
+        id = self.request.GET.get('comments_refresh_id')
+        forget = self.request.GET.get('comments_refresh_forget')
+        if id:
+            if id == 'new':
+                res = tasks.celery_test_task.delay()
+                return JsonResponse({'comments_refresh_id':res.id})
+            res = AsyncResult(id,app=celery.app)
+            if res.state=='SUCCESS':
+                result=res.get()
+                return JsonResponse(result)
+            return JsonResponse({})
+        elif forget:
+            res = AsyncResult(forget, app=celery.app)
+            res.forget()
+            return JsonResponse({})
         raise Http404
-        #return JsonResponse({ 'count': count })
-        # return HttpResponse(obj, content_type='application/json')
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rules.apps.AutodiscoverRulesConfig',
+    'django_celery_results',
     'debug_toolbar',
     'formtools',
     'widget_tweaks',
@@ -250,3 +251,7 @@ LOGGING = {
 # l.addHandler(logging.StreamHandler())
 
 CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_RESULT_BACKEND = 'django-db'
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+

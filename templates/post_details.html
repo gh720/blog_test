@@ -82,23 +82,44 @@ Post details
         $('a#refresh_comments').click(function (e) {
             e.preventDefault();
             $('.comment_refresh_spinner').show();
-            setTimeout(function() {
+            let id='new';
+            let timeout=Date.now()+5*1000;
+            let url = '{% url "refresh_comments" post.pk %}';
+            let status;
+            worker();
+            function worker() {
                 $.ajax({
                     dataType: 'json'
-                    , url: '{% url "refresh_comments" post.pk %}?refresh_id=' + $(this).data('id')
+                    , url: url + '?comments_refresh_id=' + id
                     , data: {}
                     , success: function (data) {
-                        console.log("ajax data: ", data)
-                        $('.comment_count').text(data['comment_count'])
+                        console.log("ajax data: ", data);
+                        if (data.comments_refresh_id) {
+                            id=data.comments_refresh_id;
+                        }
+                        else if (data.count) {
+                            $('.comment_count').text(data['comment_count']);
+                            status = 'success';
+                        }
                     }
                     , error: function () {
-                        $('.comment_refresh_failed').show().fadeOut(1000);
                     }
-                    , complete: function () {
-                        $('.comment_refresh_spinner').hide();
+                    , complete: function (xhr) {
+                        if (Date.now() > timeout) {
+                            $('.comment_refresh_spinner').hide();
+                            $('.comment_refresh_failed').show().fadeOut(1000);
+                        }
+                        if (status==='success' || Date.now() > timeout ) {
+                            if (id!=='new') {
+                                $.ajax(url + '?comments_refresh_forget=' + id);
+                            }
+                        }
+                        else {
+                            setTimeout(worker, 2000)
+                        }
                     }
                 });
-            }, 3000);
+            }
         });
     });
 </script>
