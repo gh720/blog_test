@@ -173,7 +173,13 @@ AUXILIARY_RESOURCES = "E:/work/devel/web/frameworks/django/blog/aux_resources"
 
 PROFILE_IMAGE_SIZE = (100, 100)
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.test.local'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'django@test.local'
+EMAIL_HOST_PASSWORD = '123'
+
 
 import django.db.backends.oracle
 import django.db.backends.base.base

@@ -8,7 +8,7 @@ from posts.common import user_uploads_path
 from posts.models import profile_c
 
 
-class SignUpForm(UserCreationForm):
+class sign_up_form_c(UserCreationForm):
     email = forms.CharField(max_length=254, required=True, widget=forms.EmailInput())
     class Meta:
         model = User

@@ -6,20 +6,20 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import UpdateView, DetailView
 
-from accounts.forms import SignUpForm, profile_edit_form_c
+from accounts.forms import sign_up_form_c, profile_edit_form_c
 from posts.models import profile_c
 from posts.views import base_view_c
 
 
 def signup(request):
     if request.method=='POST':
-        form = SignUpForm(request.POST)
+        form = sign_up_form_c(request.POST)
         if form.is_valid():
             user=form.save()
             login(request, user)
             return redirect('home')
     else:
-        form=SignUpForm()
+        form=sign_up_form_c()
     return render(request, 'signup.html',{ 'form':form })
 
 
