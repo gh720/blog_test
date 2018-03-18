@@ -83,7 +83,7 @@ Post details
             e.preventDefault();
             $('.comment_refresh_spinner').show();
             let id='new';
-            let timeout=Date.now()+5*1000;
+            let timeout=Date.now()+10*1000;
             let url = '{% url "refresh_comments" post.pk %}';
             let status;
             worker();
@@ -98,7 +98,7 @@ Post details
                             id=data.comments_refresh_id;
                         }
                         else if (data.count) {
-                            $('.comment_count').text(data['comment_count']);
+                            $('.comment_count').text(data.count);
                             status = 'success';
                         }
                     }
