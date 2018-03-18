@@ -7,26 +7,18 @@ import time
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeDoneView, PasswordResetView, \
     PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse, Http404, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from django.utils import dateformat as df
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, UpdateView, DetailView, CreateView
-from rules.contrib.views import (LoginRequiredMixin,
-                                 # PermissionRequiredMixin,
-                                 objectgetter,
-                                 permission_required)
-
-import rules.contrib.views as rviews
-
-# import django.views.generic
-# django.views.generic.
+from django.views.generic import ListView, UpdateView, DetailView, CreateView, TemplateView
+from django.core import serializers
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
-# import django
+import rules.contrib.views as rviews
 from formtools.preview import FormPreview
 
 from django.conf import settings as defaults
@@ -34,10 +26,6 @@ from django.conf import settings as defaults
 from blog import settings
 from posts.forms import PostForm, CommentForm
 from posts.models import Post, Comment, Tag
-
-from blog import urls
-
-
 
 logger = logging.getLogger('blog')
 logger.setLevel(logging.DEBUG)
@@ -423,5 +411,44 @@ class post_edit_form_preview_c(base_view_c, SingleObjectMixin, rviews.Permission
         return render(request, self.template_name, {'form': form})
 
 
+######### ajax
+
+class comment_json_c(DetailView):
+    model = Post
+    pk_url_kwarg = 'post_pk'
+
+    def render_to_response(self, context, **response_kwargs):
+        if 0 and not self.request.is_ajax():
+            return Http404
+        qs = Comment.objects.all()[0]
+        obj = serializers.serialize('json', [qs])
+        return HttpResponse(obj, content_type='application/json')
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+class comment_refresh_json_c(DetailView):
+    model = Post
+    pk_url_kwarg = 'post_pk'
+
+    def render_to_response(self, context, **response_kwargs):
+        if 0 and not self.request.is_ajax():
+            raise Http404
+        count = Comment.objects.count()
+        # obj = serializers.serialize('json', )
+        raise Http404
+        #return JsonResponse({ 'count': count })
+        # return HttpResponse(obj, content_type='application/json')
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 
+def get_post_comments_async(request, post_pk):
+    qs = Comment.objects.filter(post__pk=post_pk)
+    if request.is_ajax():
+        return JsonResponse(qs)
+    else:
+        return Http404
+    tags = [{'name': str(tag), 'id': tag.pk} for tag in Tag.objects.all()]
+    return JsonResponse({'items': tags})

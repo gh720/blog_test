@@ -59,6 +59,16 @@ $debug: false;
   padding: 0;
 }
 
+.comment_count_container {
+  .comment_refresh_spinner {
+    display:none;
+  }
+  .comment_refresh_failed {
+    display:none;
+    color:red;
+  }
+}
+
 .app_navbar_main img {
   max-width: 3em;
   max-height: 3em;

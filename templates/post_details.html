@@ -17,34 +17,43 @@ Post details
             </div>
         </div>
         <div>
-    <div class="text-right"><strong class="px-2 mt-2 text-muted">{{ post.post_comments.count }} Comments:</strong></div>
-    {% for comment in post.post_comments.all %}
-    <div class="card mb-1">
-        <div class="app_comment card-body p-0">
-            <div class="px-2  app_comment_title">
-                <span class="comment_author"><a href="#"><strong class="px-1">{{ comment.created_by.username }}</strong></a></span>
-                {% if comment.created_by == user %}
-                <a href="{% url 'remove_comment' post.pk comment.pk %}" class="comment_control label-pill text-danger">
-                    <i class="fa fa-window-close"></i> </a>
-                {% endif %}
-                <span class="comment_date"><i class="fa fa-pencil-square"></i> at {{ comment.created_at }}</span>
+            <div class="comment_count_container text-right">
+                <i class="comment_refresh_spinner fa fa-spinner"></i>
+                <i class="comment_refresh_failed fa fa-times"></i>
+                <a id="refresh_comments" href='#' class="px-2 mt-2 text-muted">
+                    <strong><span class="comment_count">{{ post.post_comments.count }}</span> Comments:</strong>
+                </a>
             </div>
-            <div class="p-2 app_comment_body">
-                {{ comment.message|linebreaks }}
+            {% for comment in post.post_comments.all %}
+            <div class="card mb-1">
+                <div class="app_comment card-body p-0">
+                    <div class="px-2  app_comment_title">
+                        <span class="comment_author"><a href="#"><strong
+                                class="px-1">{{ comment.created_by.username }}</strong></a></span>
+                        {% if comment.created_by == user %}
+                        <a href="{% url 'remove_comment' post.pk comment.pk %}"
+                           class="comment_control label-pill text-danger">
+                            <i class="fa fa-window-close"></i> </a>
+                        {% endif %}
+                        <span class="comment_date"><i
+                                class="fa fa-pencil-square"></i> at {{ comment.created_at }}</span>
+                    </div>
+                    <div class="p-2 app_comment_body">
+                        {{ comment.message|linebreaks }}
+                    </div>
+
+                </div>
             </div>
+            {% endfor %}
+            <form method="post" action="{% url 'post_details' post.pk %}" class="mt-4" novalidate>
+                {% csrf_token %}
+                {% include 'includes/form.html' with form=comment_form %}
+                <button name="{{ comment_form.prefix }}_submit" type="submit" class="btn btn-success">Comment
+                </button>
+            </form>
+
 
         </div>
-    </div>
-    {% endfor %}
-    <form method="post" action="{% url 'post_details' post.pk %}" class="mt-4" novalidate>
-        {% csrf_token %}
-        {% include 'includes/form.html' with form=comment_form %}
-        <button name="{{ comment_form.prefix }}_submit" type="submit" class="btn btn-success">Comment
-        </button>
-    </form>
-
-
-</div>
     </div>
 
 </div>
@@ -54,12 +63,12 @@ Post details
 
 {% block javascript %}
 <script>
-    $(function(){
-        let title =$('.app_comment_title');
-        title.hover(function() {
+    $(function () {
+        let title = $('.app_comment_title');
+        title.hover(function () {
             let ctls = $(this).find('.comment_control');
             ctls.animate({opacity: 1.0}, 100);
-        }, function(){
+        }, function () {
             let ctls = $(this).find('.comment_control')
             ctls.animate({opacity: 0.0}, 100);
         })
@@ -67,3 +76,30 @@ Post details
 </script>
 {% endblock %}
 
+{% block refresh_comments %}
+<script>
+    $(document).ready(function() {
+        $('a#refresh_comments').click(function (e) {
+            e.preventDefault();
+            $('.comment_refresh_spinner').show();
+            setTimeout(function() {
+                $.ajax({
+                    dataType: 'json'
+                    , url: '{% url "refresh_comments" post.pk %}?refresh_id=' + $(this).data('id')
+                    , data: {}
+                    , success: function (data) {
+                        console.log("ajax data: ", data)
+                        $('.comment_count').text(data['comment_count'])
+                    }
+                    , error: function () {
+                        $('.comment_refresh_failed').show().fadeOut(1000);
+                    }
+                    , complete: function () {
+                        $('.comment_refresh_spinner').hide();
+                    }
+                });
+            }, 3000);
+        });
+    });
+</script>
+{% endblock %}

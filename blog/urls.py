@@ -40,6 +40,10 @@ urlpatterns = [
     url(r'^account/', include('accounts.urls',namespace='accounts')),
     url(r'^posts/logo_image/$', gen_views.lightning_logo_view_c.as_view(), name='lightning_logo'),
     url(r'^tags/(?P<tag_pk>\d+)/$', posts_views.tags_view_c.as_view(), name='posts_with_the_tag'),
+
+    url(r'^posts/(?P<post_pk>\d+)/refresh_comments/$', posts_views.comment_refresh_json_c.as_view(), name='refresh_comments'),
+    url(r'^posts/(?P<post_pk>\d+)/json_test/$', posts_views.comment_json_c.as_view(), name='json_test'),
+
 ]
 
 urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -248,3 +248,5 @@ LOGGING = {
 # l = logging.getLogger('django.db.backends')
 # l.setLevel(logging.DEBUG)
 # l.addHandler(logging.StreamHandler())
+
+CELERY_BROKER_URL = 'amqp://localhost'
