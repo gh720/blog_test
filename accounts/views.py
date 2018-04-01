@@ -16,7 +16,7 @@ def signup(request):
         form = sign_up_form_c(request.POST)
         if form.is_valid():
             user=form.save()
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('home')
     else:
         form=sign_up_form_c()
@@ -78,7 +78,8 @@ class login_view_c(base_view_c, LoginView):
 
 
 class password_change_view_c(base_view_c, PasswordChangeView):
-    pass
+    def get_success_url(self):
+        return reverse('accounts:pass_changed')
 
 
 class password_change_view_done_c(base_view_c, PasswordChangeDoneView):
@@ -90,7 +91,7 @@ class password_reset_view_c(base_view_c, PasswordResetView):
     subject_template_name = 'pass_reset_subject.txt'
 
     def get_success_url(self):
-        return reverse('pass_reset_done')
+        return reverse('accounts:pass_reset_done')
 
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
@@ -98,12 +99,12 @@ class password_reset_view_c(base_view_c, PasswordResetView):
 
 class password_reset_done_view_c(base_view_c, PasswordResetDoneView):
     def get_success_url(self):
-        return reverse('pass_reset_confirm')
+        return reverse('accounts:pass_reset_confirm')
 
 
 class password_reset_confirm_view_c(base_view_c, PasswordResetConfirmView):
     def get_success_url(self):
-        return reverse('pass_reset_complete')
+        return reverse('accounts:pass_reset_complete')
 
 
 class password_reset_complete_view_c(base_view_c, PasswordResetCompleteView):

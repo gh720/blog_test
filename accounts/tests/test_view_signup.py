@@ -8,14 +8,14 @@ from accounts.views import signup
 
 class sign_up_tests_c(TestCase):
     def setUp(self):
-        url = reverse('signup')
+        url = reverse('accounts:signup')
         self.response = self.client.get(url)
 
     def test_signup_status_code(self):
         self.assertEquals(self.response.status_code, 200)
 
     def test_signup_url_resolves_signup_view(self):
-        view = resolve('/signup/')
+        view = resolve('/accounts/signup/')
         self.assertEquals(view.func, signup)
 
     def test_csrf(self):
@@ -44,10 +44,10 @@ class sign_up_form_test_c(TestCase):
 
 class successful_sign_up_tests(TestCase):
     def setUp(self):
-        url = reverse('signup')
+        url = reverse('accounts:signup')
         data = {
-            'username': 'john',
-            'email': 'john@doe.com',
+            'username': 'user1',
+            'email': 'user1@test.local',
             'password1': 'abcdef123456',
             'password2': 'abcdef123456'
         }
@@ -78,7 +78,7 @@ class successful_sign_up_tests(TestCase):
 
 class invalid_sign_up_tests(TestCase):
     def setUp(self):
-        url = reverse('signup')
+        url = reverse('accounts:signup')
         self.response = self.client.post(url, {})  # submit an empty dictionary
 
     def test_signup_status_code(self):

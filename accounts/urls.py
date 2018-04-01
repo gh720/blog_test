@@ -4,6 +4,8 @@ from accounts import views as account_views
 from django.contrib.auth import views as auth_views
 import accounts.views as account_views
 
+app_name='accounts'
+
 urlpatterns = [
 url(r'^login/$', account_views.login_view_c.as_view(template_name='login.html'), name='login'),
 url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),

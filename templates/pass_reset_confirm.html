@@ -17,7 +17,8 @@
 </form>
 {% else %}
 <p>The password reset link is invalid, possibly because is has already been used. </p>
-<p>Please, request a new password reset</p>
+<a href="{% url 'accounts:pass_reset' %}" class="btn btn-secondary btn-block">Request a new password reset link</a>
+<!--<p>Please, request a new password reset</p>-->
 {% endif %}
 
 {% endblock %}

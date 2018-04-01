@@ -37,7 +37,7 @@ urlpatterns = [
     url(r'^posts/(?P<post_pk>\d+)/comments/(?P<comment_pk>\d+)/delete/$', posts_views.remove_comment, name='remove_comment'),
     url(r'^tags/$', posts_views.get_tags, name='tags'),
 
-    url(r'^account/', include('accounts.urls',namespace='accounts')),
+    url(r'^accounts/', include('accounts.urls')),
     url(r'^posts/logo_image/$', gen_views.lightning_logo_view_c.as_view(), name='lightning_logo'),
     url(r'^tags/(?P<tag_pk>\d+)/$', posts_views.tags_view_c.as_view(), name='posts_with_the_tag'),
 

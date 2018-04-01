@@ -46,12 +46,14 @@ class Post(models.Model):
     comment_count = models.PositiveIntegerField(default=0)
 
     class Meta:
+        # db_table = 'posts_post'
         permissions = [
             ('view_post', 'Can view entry'),  # check if empty
         ]
         pass
 
     def __str__(self):
+        # _fields = Post._meta.get_fields()
         return self.title
 
     def custom_order(self):

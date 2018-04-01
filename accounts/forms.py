@@ -14,6 +14,8 @@ class sign_up_form_c(UserCreationForm):
         model = User
         fields=('username', 'email',  'password1', 'password2')
 
+
+
 class profile_edit_form_c(forms.ModelForm):
     profile_image = forms.ImageField(widget=forms.FileInput)
     class Meta:

@@ -16,6 +16,8 @@ class post_view_tests_c(TestCase):
 
     free_access_urls=[
         reverse('accounts:login')
+        , reverse('accounts:signup')
+        , reverse('accounts:pass_reset')
         , reverse('home')
         , reverse('tags')
         , reverse('lightning_logo')
