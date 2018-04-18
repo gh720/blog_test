@@ -99,6 +99,7 @@ class profile_c(models.Model):
         verbose_name_plural = "profiles"
 
     def save(self, *args, **kwargs):
+        # test = getattr(instance, field_name, None)
         super().save(*args, **kwargs)
         self.save_thumbnail()
 

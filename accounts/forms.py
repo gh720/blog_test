@@ -27,6 +27,8 @@ class profile_edit_form_c(forms.ModelForm):
                  label_suffix=None, empty_permitted=False, instance=None, use_required_attribute=None):
         super().__init__(data, files, auto_id, prefix, initial, error_class, label_suffix, empty_permitted, instance,
                          use_required_attribute)
+        ff = getattr(self.instance, 'profile_image')
+        result = ff.__class__(self.instance, ff.field, ff.name)
         self.fields['profile_image'].render_image = 1
         self.fields['profile_image'].render_image_url=self.instance.thumb_url
 

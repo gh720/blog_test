@@ -25,7 +25,7 @@ SECRET_KEY = 'muls%mkiz!yozum^z)2gvk3k4fh66&m6^skhmss05a%u-_@o&t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.99.100','127.0.0.1','dockr']
 
 # Application definition
 
@@ -62,7 +62,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-INTERNAL_IPS=['127.0.0.1']
+INTERNAL_IPS=['127.0.0.1','192.168.99.1']
 
 
 DEBUG_TOOLBAR_CONFIG = {
@@ -104,6 +104,15 @@ DATABASE_CONFIGS =  {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
+    'postgresql': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'CONN_MAX_AGE': 900
+
+    }
 }
 
 DATABASES = {
@@ -116,7 +125,7 @@ DATABASES = {
 }
 
 DATABASES = {
-    'default' : DATABASE_CONFIGS['sqlite']
+    'default' : DATABASE_CONFIGS['postgresql']
 }
 
 DATABASE_ROUTERS = {
@@ -157,7 +166,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_ROOT = '/prod_static/'
+STATIC_ROOT = './prod_static/'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')

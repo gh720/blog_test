@@ -1,0 +1,62 @@
+version: '2'
+
+services:
+  db:
+    build:
+      context: ..
+      dockerfile: ./docker/postgres.docker
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+    
+    # entrypoint: ["/scripts/wait_db_ready.sh"]
+
+    volumes:
+      - data-volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+    
+  cache:
+    image: memcached
+
+  mq:
+    image: rabbitmq
+
+  nginx:
+    build:
+      context: ..
+      dockerfile: ./docker/nginx.docker
+    entrypoint: ["nginx", "-g", "daemon off;"]
+    ports:
+      - "8000:8000"
+    #networks:
+    #  - main  # Add the container to the network "main"
+    depends_on:
+      - web
+    volumes:
+      - media-volume:/blog/uploads
+
+  manage:
+    build:
+      context: ..
+      dockerfile: ./docker/app.docker
+    volumes:
+      - media-volume:/blog/uploads
+
+  web:
+    extends:
+      service: manage
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+    
+    entrypoint: [ "scripts/web/wait_db_ready.sh", "db", "init/db_init.sh" ]
+    ports:
+      - "8001:8001"
+    depends_on: 
+      - db
+
+volumes:
+  media-volume:
+  data-volume:

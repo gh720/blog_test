@@ -1,0 +1,11 @@
+FROM nginx:latest
+
+RUN apt-get update
+
+RUN apt-get install -y telnet net-tools dnsutils tcpdump inetutils-ping inetutils-traceroute
+
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+
+ADD ./prod_static/ /blog/static/
+
+EXPOSE 8000
