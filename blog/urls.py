@@ -19,7 +19,7 @@ from django.contrib import admin
 # from django.contrib.auth import views as auth_views
 
 import accounts
-from blog import settings
+from django.conf import settings
 from posts import views as posts_views, gen_views
 from accounts import views as account_views
 from posts.forms import PostForm

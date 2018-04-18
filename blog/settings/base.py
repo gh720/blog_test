@@ -14,7 +14,9 @@ import os
 import logging
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(os.path.join(__file__,
+    os.pardir))))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -24,8 +26,6 @@ SECRET_KEY = 'muls%mkiz!yozum^z)2gvk3k4fh66&m6^skhmss05a%u-_@o&t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ['192.168.99.100','127.0.0.1','dockr']
 
 # Application definition
 
@@ -122,10 +122,6 @@ DATABASES = {
     #     'USER': 'django',
     #     'PASSWORD': '123'
     # },
-}
-
-DATABASES = {
-    'default' : DATABASE_CONFIGS['postgresql']
 }
 
 DATABASE_ROUTERS = {
