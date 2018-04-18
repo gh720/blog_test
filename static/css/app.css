@@ -45,6 +45,7 @@
 .app_panel_heading {
   background-image: repeating-linear-gradient(160deg, #ebebeb, #c2c2c2 100px, #ebebeb 200px);
   box-shadow: 1px 1px 0px #0b2e13;
+  text-shadow: 1px 1px 0px #777;
   color: #ffcd02 !important;
   padding: 5px 10px 5px 10px;
   font-size: 1.5em;
@@ -53,9 +54,10 @@
   display: flex;
   width: 100%;
   align-items: center; }
+  .app_panel_heading .just_right {
+    text-shadow: initial; }
   .app_panel_heading .just_left {
     margin-top: -2px;
-    text-shadow: 1px 1px 0px #777;
     margin-right: auto;
     flex: 0 0 auto; }
   .app_panel_heading .just_right {
@@ -197,6 +199,18 @@ table.app_profile_table td:nth-of-type(2) {
   color: #000;
   background-color: #f4d59e;
   padding-top: 0px; }
+
+blockquote {
+  border-left: 1px solid #999;
+  padding-left: 0.5em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  background-color: #9fcdff;
+  border-width: 0 0 0 5px;
+  border-color: #0000ff; }
+  blockquote p {
+    padding: 0.1em;
+    margin: 0em; }
 
 .form_with_tags label {
   font-weight: bold;

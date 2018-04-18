@@ -12,15 +12,15 @@ from posts.views import base_view_c
 
 
 def signup(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         form = sign_up_form_c(request.POST)
         if form.is_valid():
-            user=form.save()
+            user = form.save()
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('home')
     else:
-        form=sign_up_form_c()
-    return render(request, 'signup.html',{ 'form':form })
+        form = sign_up_form_c()
+    return render(request, 'signup.html', {'form': form})
 
 
 class profile_edit_view_c(base_view_c, UpdateView):
@@ -33,6 +33,12 @@ class profile_edit_view_c(base_view_c, UpdateView):
     def get_success_url(self):
         return reverse('profile', kwargs=dict(user_pk=self.object.user.pk))
         # return super().get_success_url()
+
+    # def get_object(self, queryset=None):
+    #     if self.request.user.is_authenticated:
+    #         obj, created = profile_c.objects.get_or_create(defaults={'user': self.request.user})
+    #     return super().get_object(queryset)
+
 
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
@@ -58,11 +64,18 @@ class profile_view_c(base_view_c, DetailView):
     template_name = 'profile.html'
     context_object_name = 'profile'
 
+    # def get_object(self, queryset=None):
+    #     if self.request.user.is_authenticated:
+    #         obj, created = profile_c.objects.get_or_create(defaults={'user': self.request.user})
+    #     return super().get_object(queryset)
+
     def get(self, request, *args, **kwargs):
         user_pk = self.kwargs.get('user_pk')
         # user = get_object_or_404(User, pk=user_pk)
         # profile = user.profile
-        profile = profile_c.objects.get(user__pk=user_pk)
+        profile =  profile_c.objects.filter(user__pk=user_pk).first()
+        if (not profile):
+            profile = profile_c.objects.create(user=self.request.user)
         self.object = profile
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
@@ -109,5 +122,3 @@ class password_reset_confirm_view_c(base_view_c, PasswordResetConfirmView):
 
 class password_reset_complete_view_c(base_view_c, PasswordResetCompleteView):
     pass
-
-

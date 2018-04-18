@@ -1,16 +1,10 @@
 body {
-  background-image: url(../img/topography.png);
-}
-
-.logo {
-  font-family: 'sans-serif', cursive;
-}
+  background-image: url(../img/topography.png); }
 
 .logo a {
-  color: rgba(0,0,0,.9);
-}
+  color: rgba(0, 0, 0, 0.9); }
 
 .logo a:hover,
 .logo a:active {
-  text-decoration: none;
-}
+  text-decoration: none; }
+

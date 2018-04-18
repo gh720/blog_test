@@ -3,12 +3,8 @@ import json
 
 import logging
 
-import time
-
 from celery.result import AsyncResult
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeDoneView, PasswordResetView, \
-    PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.http import JsonResponse, Http404, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -23,9 +19,9 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 import rules.contrib.views as rviews
 from formtools.preview import FormPreview
 
-from django.conf import settings as defaults
+from django.conf import settings, global_settings as defaults
 
-from blog import settings, celery, tasks
+from blog import celery, tasks
 from posts.forms import PostForm, CommentForm
 from posts.models import Post, Comment, Tag
 
@@ -49,7 +45,6 @@ def remove_comment(request, post_pk, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
     comment.delete()
     return redirect(reverse('post_details', kwargs={'post_pk': post_pk}))
-    # return render(request, 'post_details.html', { 'post':post, 'form': form})
 
 
 @login_required
@@ -66,11 +61,6 @@ class base_view_c():
         ctx['latest_posts'] = last3
         ctx['popular_posts'] = popular3
         ctx['tags'] = Tag.objects.all()
-        # try:
-        #     obj = super().get_object()
-        #     ctx['can_edit'] = self.can_edit(obj)
-        # except AttributeError:
-        #     pass
         return ctx
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -81,40 +71,22 @@ class base_view_c():
         ctx = super().get_context(request, form)
         return self.add_common_context(ctx)
 
-    def can_edit(self, obj):
-        if not obj:
-            return False
-        if not (self.request.user and self.request.user.is_authenticated):
-            return False
-        if obj.created_by == self.request.user:
-            return True
-        if self.request.user.is_superuser:
-            return True
-        if hasattr(self, 'has_permission') and self.has_permission():
-            return True
-        return False
-
-
-# @login_required
-# def new_post(request):
-#     if request.method=='POST':
-#         form=PostForm(request.POST)
-#         if form.is_valid():
-#             post=form.save(commit=False)
-#             post.created_by=request.user
-#             post.save()
-#             return redirect(reverse('home'))
-#     else:
-#         form=PostForm()
-#     return render(request, 'new_post.html', { 'form':form })
-
-
-
 
 class post_list_view_c(base_view_c, ListView):
     model = Post
     context_object_name = 'posts'
     template_name = 'posts.html'
+
+    def get_queryset(self):
+        qs = list( super().get_queryset() )
+        for post in qs:
+            post.set_can_edit(self.request)
+        return qs
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        ctx = super().get_context_data(object_list=object_list, **kwargs)
+        return ctx
+
 
 class tags_view_c(base_view_c, ListView):
     model = Post
@@ -174,6 +146,9 @@ class post_details_view_c(base_view_c, DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['comment_form'] = ctx.get('comment_form', CommentForm())
+        # obj = super().get_object()
+        self.object.set_can_edit(self.request)
+        # ctx['can_edit'] = self.object.can_edit(self.object)
         return ctx
 
 
@@ -186,7 +161,7 @@ class post_create_view_c(base_view_c, PermissionRequiredMixin, CreateView):
     initial = dict()
     template_name = 'new_post.html'
     pk_url_kwarg = 'post_pk'
-    permission_required = [ 'post.add', ]
+    permission_required = ['post.add', ]
 
     # context_object_name = 'something'
 
@@ -257,10 +232,9 @@ class post_create_view_c(base_view_c, PermissionRequiredMixin, CreateView):
     #     return redirect('home')
 
 
-
 class post_edit_view_c(base_view_c, rviews.PermissionRequiredMixin, UpdateView):
     model = Post
-    permission_required = [ 'post.change', ]
+    permission_required = ['post.change', ]
     form_class = PostForm
 
     def get_permission_object(self):
@@ -422,19 +396,20 @@ class comment_json_c(DetailView):
     def render_to_response(self, context, **response_kwargs):
         if 0 and not self.request.is_ajax():
             return Http404
-        qs = Comment.objects.all()[0]
+        qs = Comment.objects.all().first()
         obj = serializers.serialize('json', [qs])
         return HttpResponse(obj, content_type='application/json')
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+
 class comment_refresh_json_c(DetailView):
     model = Post
     pk_url_kwarg = 'post_pk'
 
     def render_to_response(self, context, **response_kwargs):
-        result=None
+        result = None
         if 0 and not self.request.is_ajax():
             raise Http404
         id = self.request.GET.get('comments_refresh_id')
@@ -442,10 +417,10 @@ class comment_refresh_json_c(DetailView):
         if id:
             if id == 'new':
                 res = tasks.celery_test_task.delay()
-                return JsonResponse({'comments_refresh_id':res.id})
-            res = AsyncResult(id,app=celery.app)
-            if res.state=='SUCCESS':
-                result=res.get()
+                return JsonResponse({'comments_refresh_id': res.id})
+            res = AsyncResult(id, app=celery.app)
+            if res.state == 'SUCCESS':
+                result = res.get()
                 return JsonResponse(result)
             return JsonResponse({})
         elif forget:

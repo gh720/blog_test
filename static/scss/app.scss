@@ -61,11 +61,11 @@ $debug: false;
 
 .comment_count_container {
   .comment_refresh_spinner {
-    display:none;
+    display: none;
   }
   .comment_refresh_failed {
-    display:none;
-    color:red;
+    display: none;
+    color: red;
   }
 }
 
@@ -95,6 +95,7 @@ $debug: false;
   //background-image: linear-gradient(160deg, #ffffff 0%, rgb(1, 223, 230) 100%);
   @include steel_rep;
   box-shadow: 1px 1px 0px #0b2e13;
+  text-shadow: 1px 1px 0px #777;
   color: #ffcd02 !important;
   padding: 5px 10px 5px 10px;
   font-size: 1.5em;
@@ -105,9 +106,12 @@ $debug: false;
   display: flex;
   width: 100%;
   align-items: center;
+  .just_right {
+    text-shadow: initial;
+  }
   .just_left {
-    margin-top:-2px;
-    text-shadow: 1px 1px 0px #777;
+    margin-top: -2px;
+    //text-shadow: 1px 1px 0px #777;
     //line-height: 40px;
     //display:inline-flex;
     //align-items:center;
@@ -132,7 +136,7 @@ $debug: false;
   border-width: 1px;
   border-left: 1px;
   border-right: 1px;
-  min-height:2em;
+  min-height: 2em;
   align-items: center;
   span {
     margin: 2px;
@@ -309,6 +313,52 @@ table.app_profile_table td:nth-of-type(2) {
   }
 }
 
+//blockquote {
+//  margin-left: 40px;
+//  background-color: #9fcdff;
+//}
+
+blockquote {
+  //margin: 1em 0em 2em 0em;
+  border-left: 1px solid #999;
+  padding-left: 0.5em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  background-color: #9fcdff;
+  border-width: 0 0 0 5px;
+  border-color: #0000ff;
+  p {
+    padding: 0.1em;
+    margin: 0em;
+  }
+}
+
+//blockquote:before {
+//  content: open-quote;
+//  font-size: 6em;
+//  line-height: 0px;
+//  margin: 0px 5px 0px -40px;
+//  vertical-align: bottom;
+//  position: relative;
+//  left: -15px;
+//}
+
+//blockquote p:first-letter {
+//  margin: .2em .3em .1em 0;
+//  font-size: 220%;
+//}
+
+//blockquote:before {
+//  content: open-quote;
+//  font-size: 6em;
+//  line-height: 0px;
+//  margin: 0px 5px 0px -40px;
+//  vertical-align: bottom;
+//  position: relative;
+//  float: left;
+//  top: .4em;
+//  left: -.15 em;
+//}
 
 .form_with_tags {
   label {

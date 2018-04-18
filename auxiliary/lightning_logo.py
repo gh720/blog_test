@@ -7,7 +7,7 @@ import numpy
 
 from blend_modes import blend_modes
 
-from blog import settings
+from django.conf import settings
 
 
 class ddot(dict):

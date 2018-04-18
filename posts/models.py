@@ -25,8 +25,10 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ["id", "tag"]
 
 
-#import django.contrib.auth.backends
+# import django.contrib.auth.backends
 import django.contrib.auth
+
+
 # import rules
 
 class Post(models.Model):
@@ -45,6 +47,10 @@ class Post(models.Model):
     view_count = models.PositiveIntegerField(default=0)
     comment_count = models.PositiveIntegerField(default=0)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._can_edit = False
+
     class Meta:
         # db_table = 'posts_post'
         permissions = [
@@ -53,7 +59,6 @@ class Post(models.Model):
         pass
 
     def __str__(self):
-        # _fields = Post._meta.get_fields()
         return self.title
 
     def custom_order(self):
@@ -65,6 +70,22 @@ class Post(models.Model):
     def assigned_tags(self):
         return ";".join([str(tag) for tag in self.tags.all()])
 
+    @property
+    def can_edit(self):
+        return self._can_edit
+
+    def set_can_edit(self, request):
+        if not (request.user and request.user.is_authenticated):
+            self._can_edit = False
+        elif self.created_by == request.user:
+            self._can_edit = True
+        elif request.user.is_superuser:
+            self._can_edit = True
+        elif hasattr(self, 'has_permission') and self.has_permission():
+            self._can_edit = True
+        else:
+            self._can_edit = False
+        return self._can_edit
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ["id", "title", "message", 'created_at', 'updated_at'

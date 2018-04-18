@@ -3,18 +3,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms.utils import ErrorList
 
-from blog import settings
-from posts.common import user_uploads_path
 from posts.models import profile_c
-
 
 class sign_up_form_c(UserCreationForm):
     email = forms.CharField(max_length=254, required=True, widget=forms.EmailInput())
     class Meta:
         model = User
         fields=('username', 'email',  'password1', 'password2')
-
-
 
 class profile_edit_form_c(forms.ModelForm):
     profile_image = forms.ImageField(widget=forms.FileInput)

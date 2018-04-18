@@ -1,6 +1,6 @@
 <div class="row alert-info">
     <div>
-    <h5><strong>Profile:</strong> &nbsp; <strong>{{ profile.user.username }}</strong></h5>
+    <h5><strong>Profile:</strong> &nbsp; <strong class="profile_user_name">{{ profile.user.username }}</strong></h5>
     {% if profile_edit %}
     <div><a href="{% url 'accounts:edit_profile' profile.pk %}"> <i class="fas fa-pencil-alt"></i> Edit</a></div>
     {% endif %}

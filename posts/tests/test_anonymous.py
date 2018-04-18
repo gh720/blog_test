@@ -18,6 +18,8 @@ class post_view_tests_c(TestCase):
         reverse('accounts:login')
         , reverse('accounts:signup')
         , reverse('accounts:pass_reset')
+        , reverse('accounts:pass_reset_done')
+        , reverse('accounts:pass_reset_complete')
         , reverse('home')
         , reverse('tags')
         , reverse('lightning_logo')
@@ -55,6 +57,8 @@ class post_view_tests_c(TestCase):
             if namespace=='admin' and depth>=2:
                 continue
             full_entry_name = entry.name if namespace==None else namespace+":"+entry.name
+            if re.search('refresh_comments|json_test', full_entry_name): # skipping celery dependent tests
+                continue
             try:
                 if entry.regex.groupindex.get('post_pk') and len(entry.regex.groupindex)==1:
                     url = reverse(full_entry_name, kwargs=dict(post_pk=self.post1.pk))
@@ -63,13 +67,12 @@ class post_view_tests_c(TestCase):
                 elif len(entry.regex.groupindex)==0:
                     url = reverse(full_entry_name)
             except:
-                debug=1
                 pass
             status = self.anon_status(url)
             try:
                 response = self.client.get(url)
             except:
-                debug=1
+                pass
             self.assertEqual(response.status_code, status, msg=url)
 
     def test_edit_pv(self):
