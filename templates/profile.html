@@ -11,10 +11,9 @@
     {% include 'profile_header.html' with profile_edit=True %}
     <div class="row">
         <div class="col-md-4">
-            <div class="profile_image">
-                {#% if field.field.render_image_url %#}
-                    <img src="{{profile.thumb_url }}"/>
-                {#% endif %#}
+            <div class="app_profile_image">
+                {% static 'img/avatar.svg' as default_profile_thumbnail %}
+                    <img src="{% firstof profile.thumb_url default_profile_thumbnail %}"/>
             </div>
         </div>
         <div class="col-md-8">
@@ -42,7 +41,7 @@
                             <textarea class="form-control" placeholder="Your comment..."></textarea>
                         </div>
                     </form>
-                    <button type="submit">Comment</button>
+                    <button type="submit">This one not working, sorry.</button>
                 </div>
             </div>
         </div>

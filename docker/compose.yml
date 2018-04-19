@@ -50,6 +50,7 @@ services:
     environment:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'postgres'
+      DJANGO_SETTINGS_MODULE: 'blog.settings.prod'
     
     entrypoint: [ "scripts/web/wait_db_ready.sh", "db", "init/db_init.sh" ]
     ports:

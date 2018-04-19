@@ -395,7 +395,7 @@ class comment_json_c(DetailView):
 
     def render_to_response(self, context, **response_kwargs):
         if 0 and not self.request.is_ajax():
-            return Http404
+            raise Http404
         qs = Comment.objects.all().first()
         obj = serializers.serialize('json', [qs])
         return HttpResponse(obj, content_type='application/json')
@@ -438,6 +438,6 @@ def get_post_comments_async(request, post_pk):
     if request.is_ajax():
         return JsonResponse(qs)
     else:
-        return Http404
+        raise Http404
     tags = [{'name': str(tag), 'id': tag.pk} for tag in Tag.objects.all()]
     return JsonResponse({'items': tags})

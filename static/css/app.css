@@ -172,6 +172,7 @@ table.app_profile_table td:nth-of-type(2) {
 
 .app_profile_image img {
   max-width: 100%;
+  min-width: 120px;
   max-height: 100%; }
 
 .app_comment_body {

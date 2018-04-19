@@ -1,5 +1,9 @@
 FROM postgres:latest
 
+RUN apt-get update
+
+RUN apt-get install -y vim
+
 COPY ./scripts/postgres/wait_db_ready.sh /scripts/wait_db_ready.sh
 
 COPY ./scripts/postgres/wait_db_ready.sh /docker-entrypoint-initdb.d/wait_db_ready.sh

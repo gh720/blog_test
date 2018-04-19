@@ -172,10 +172,10 @@ LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'accounts:login'
 
-MEDIA_ROOT = "E:/work/devel/web/frameworks/django/blog/uploads"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'
 
-AUXILIARY_RESOURCES = "E:/work/devel/web/frameworks/django/blog/aux_resources"
+AUXILIARY_RESOURCES = os.path.join(BASE_DIR, 'aux_resources')
 
 PROFILE_IMAGE_SIZE = (100, 100)
 
@@ -204,7 +204,6 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': './logs/debug.log',
             'formatter': 'default',
-            #            'filename': 'E:/work/devel/web/frameworks/django/blog/logs/debug.log',
         },
         'django.server': {
             'level': 'DEBUG',
