@@ -2,6 +2,7 @@ import datetime
 import json
 
 import logging
+from pprint import pprint
 
 from celery.result import AsyncResult
 from django.contrib.auth.decorators import login_required
@@ -412,11 +413,16 @@ class comment_refresh_json_c(DetailView):
         result = None
         if 0 and not self.request.is_ajax():
             raise Http404
+        post_pk=self.kwargs.get('post_pk')
+        count = Comment.objects.filter(pk=post_pk).count()
+        if not post_pk:
+            raise Http404
+
         id = self.request.GET.get('comments_refresh_id')
         forget = self.request.GET.get('comments_refresh_forget')
         if id:
             if id == 'new':
-                res = tasks.celery_test_task.delay()
+                res = tasks.celery_test_task.delay(post_pk)
                 return JsonResponse({'comments_refresh_id': res.id})
             res = AsyncResult(id, app=celery.app)
             if res.state == 'SUCCESS':
@@ -426,7 +432,7 @@ class comment_refresh_json_c(DetailView):
         elif forget:
             res = AsyncResult(forget, app=celery.app)
             res.forget()
-            return JsonResponse({})
+            return JsonResponse({'forgotten': id})
         raise Http404
 
     def get(self, request, *args, **kwargs):

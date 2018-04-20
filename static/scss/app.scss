@@ -67,6 +67,10 @@ $debug: false;
     display: none;
     color: red;
   }
+  .comment_refresh_succeeded {
+    display: none;
+    color: limegreen;
+  }
 }
 
 .app_navbar_main img {
@@ -131,7 +135,6 @@ $debug: false;
   margin-top: 10px;
   display: flex;
   flex-wrap: wrap;
-  //background-color: $inactive_color;
   border-color: black;
   border-width: 1px;
   border-left: 1px;

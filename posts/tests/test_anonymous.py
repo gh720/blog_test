@@ -57,7 +57,7 @@ class post_view_tests_c(TestCase):
             if namespace=='admin' and depth>=2:
                 continue
             full_entry_name = entry.name if namespace==None else namespace+":"+entry.name
-            if re.search('refresh_comments|json_test', full_entry_name): # skipping celery dependent tests
+            if re.search('refresh_comments|json_test', full_entry_name): # skipping celery dependent urls
                 continue
             try:
                 if entry.regex.groupindex.get('post_pk') and len(entry.regex.groupindex)==1:

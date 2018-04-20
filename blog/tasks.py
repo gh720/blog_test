@@ -10,7 +10,7 @@ from posts.models import Comment
 
 
 @shared_task
-def celery_test_task(input=None):
-    time.sleep(5)
-    count = Comment.objects.count()
+def celery_test_task(post_pk=None):
+    time.sleep(3) # emulating delay
+    count = Comment.objects.filter(post__pk=post_pk).count()
     return  { 'count': count } # '%s Done!' % (input);

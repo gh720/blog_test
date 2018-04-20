@@ -20,6 +20,7 @@ Post details
             <div class="comment_count_container text-right">
                 <i class="comment_refresh_spinner fa fa-spinner"></i>
                 <i class="comment_refresh_failed fa fa-times"></i>
+                <i class="comment_refresh_succeeded fa fa-check"></i>
                 <a id="refresh_comments" href='#' class="px-2 mt-2 text-muted">
                     <strong><span class="comment_count">{{ post.post_comments.count }}</span> Comments:</strong>
                 </a>
@@ -78,12 +79,13 @@ Post details
 
 {% block refresh_comments %}
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('a#refresh_comments').click(function (e) {
             e.preventDefault();
             $('.comment_refresh_spinner').show();
-            let id='new';
-            let timeout=Date.now()+10*1000;
+            let id = 'new';
+            let ajax_timeout = 2 * 1000;
+            let total_timeout = Date.now() + 10*1000;
             let url = '{% url "refresh_comments" post.pk %}';
             let status;
             worker();
@@ -92,26 +94,34 @@ Post details
                     dataType: 'json'
                     , url: url + '?comments_refresh_id=' + id
                     , data: {}
+                    , timeout: ajax_timeout
                     , success: function (data) {
                         console.log("ajax data: ", data);
                         if (data.comments_refresh_id) {
-                            id=data.comments_refresh_id;
+                            id = data.comments_refresh_id;
                         }
-                        else if (data.count) {
+                        else if (data.count!=null) {
                             $('.comment_count').text(data.count);
                             status = 'success';
                         }
                     }
-                    , error: function () {
+                    , error: function (e) {
+                        console.log("error:", e)
                     }
                     , complete: function (xhr) {
-                        if (Date.now() > timeout) {
-                            $('.comment_refresh_spinner').hide();
-                            $('.comment_refresh_failed').show().fadeOut(1000);
-                        }
-                        if (status==='success' || Date.now() > timeout ) {
-                            if (id!=='new') {
+                        if (status === 'success' || Date.now() > total_timeout) {
+                            if (id !== 'new') {
                                 $.ajax(url + '?comments_refresh_forget=' + id);
+                            }
+                            if (status==='success') {
+                                $('.comment_refresh_spinner').hide();
+                                $('.comment_refresh_failed').hide();
+                                $('.comment_refresh_succeeded').show().fadeOut(1000);
+                            }
+                            else {
+                                $('.comment_refresh_spinner').hide();
+                                $('.comment_refresh_succeeded').hide();
+                                $('.comment_refresh_failed').show().fadeOut(1000);
                             }
                         }
                         else {
