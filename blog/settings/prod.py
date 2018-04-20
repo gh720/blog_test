@@ -7,7 +7,8 @@ ADMINS = (
     ('ME', 'webmaster@test.local'),
 )
 
-ALLOWED_HOSTS = ['192.168.99.100','localhost', '127.0.0.1','dockr']
+# to make this secure, replace '*' with the hostname of the server running Django
+ALLOWED_HOSTS = ['*','localhost', '127.0.0.1']
 
 DATABASES = {
     'default' : DATABASE_CONFIGS['postgresql']
