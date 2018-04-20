@@ -261,7 +261,7 @@ LOGGING = {
 # l.setLevel(logging.DEBUG)
 # l.addHandler(logging.StreamHandler())
 
-CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = 'amqp://rabbitmq'
 CELERY_RESULT_BACKEND = 'django-db'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'

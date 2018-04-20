@@ -10,3 +10,4 @@ django-formtools==2.1
 django-widget-tweaks==1.4.1
 Pillow==5.0.0
 psycopg2==2.7.4
+celery==4.1.0

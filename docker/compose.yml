@@ -9,18 +9,12 @@ services:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'postgres'
     
-    # entrypoint: ["/scripts/wait_db_ready.sh"]
-
     volumes:
       - data-volume:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
-    
-  cache:
-    image: memcached
-
-  mq:
+  rabbitmq:
     image: rabbitmq
 
   nginx:
@@ -30,8 +24,6 @@ services:
     entrypoint: ["nginx", "-g", "daemon off;"]
     ports:
       - "8000:8000"
-    #networks:
-    #  - main  # Add the container to the network "main"
     depends_on:
       - web
     volumes:
@@ -57,6 +49,19 @@ services:
       - "8001:8001"
     depends_on: 
       - db
+
+  celery:
+    extends:
+      service: manage
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      DJANGO_SETTINGS_MODULE: 'blog.settings.prod'
+
+    entrypoint: [ "celery", "-A", "blog", "worker", "-l", "info" ]
+    depends_on:
+      - db
+      - rabbitmq
 
 volumes:
   media-volume:
